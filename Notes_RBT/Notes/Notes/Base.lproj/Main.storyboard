@@ -152,28 +152,28 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NXg-9J-P74" id="ca7-fF-dne">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ptu-C6-heA">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ptu-C6-heA">
                                                     <rect key="frame" x="0.0" y="2" width="600" height="574"/>
                                                 </imageView>
-                                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NDz-TT-b4w">
-                                                    <rect key="frame" x="50" y="62" width="500" height="249"/>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NDz-TT-b4w">
+                                                    <rect key="frame" x="50" y="61" width="500" height="249"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </view>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y2m-WJ-r2j">
-                                                    <rect key="frame" x="50" y="62" width="500" height="249"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y2m-WJ-r2j">
+                                                    <rect key="frame" x="50" y="61" width="500" height="249"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" enablesReturnKeyAutomatically="YES"/>
                                                 </textView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottomMargin" secondItem="ptu-C6-heA" secondAttribute="bottom" constant="-7" id="4Qc-Mg-Wmo"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="ptu-C6-heA" secondAttribute="bottom" constant="-8" id="4Qc-Mg-Wmo"/>
                                                 <constraint firstAttribute="centerY" secondItem="Y2m-WJ-r2j" secondAttribute="centerY" id="IoK-MH-xFg"/>
                                                 <constraint firstItem="Y2m-WJ-r2j" firstAttribute="bottom" secondItem="NDz-TT-b4w" secondAttribute="bottom" id="JRv-u2-Bxd"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Y2m-WJ-r2j" secondAttribute="trailing" constant="42" id="Oih-BE-KEb"/>
                                                 <constraint firstItem="ptu-C6-heA" firstAttribute="leading" secondItem="ca7-fF-dne" secondAttribute="leading" id="PBZ-yP-Ppi"/>
-                                                <constraint firstItem="ptu-C6-heA" firstAttribute="top" secondItem="ca7-fF-dne" secondAttribute="top" constant="1" id="SSm-AI-19B"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="ptu-C6-heA" secondAttribute="trailing" constant="-652" id="Tg0-yk-iLN"/>
+                                                <constraint firstItem="ptu-C6-heA" firstAttribute="top" secondItem="ca7-fF-dne" secondAttribute="top" constant="2" id="SSm-AI-19B"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="ptu-C6-heA" secondAttribute="trailing" constant="-8" id="Tg0-yk-iLN"/>
                                                 <constraint firstItem="Y2m-WJ-r2j" firstAttribute="leading" secondItem="ca7-fF-dne" secondAttribute="leadingMargin" constant="92" id="Uxs-3X-UM3"/>
                                                 <constraint firstItem="Y2m-WJ-r2j" firstAttribute="centerX" secondItem="NDz-TT-b4w" secondAttribute="centerX" id="YAq-HW-Q1n"/>
                                                 <constraint firstItem="NDz-TT-b4w" firstAttribute="top" secondItem="ca7-fF-dne" secondAttribute="topMargin" constant="53" id="ZPC-Yl-LBB"/>
@@ -205,9 +205,9 @@
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wkb-mg-2IU">
-                                <rect key="frame" x="19" y="543" width="74" height="35"/>
+                                <rect key="frame" x="19" y="543" width="54" height="35"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="74" id="MDI-fC-PuM"/>
+                                    <constraint firstAttribute="width" constant="54" id="MDI-fC-PuM"/>
                                     <constraint firstAttribute="height" constant="35" id="sA6-aZ-ZS1"/>
                                 </constraints>
                                 <state key="normal" backgroundImage="Camera Icon">
@@ -245,7 +245,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="QJW-mw-sd9" secondAttribute="trailing" constant="-16" id="QrC-mc-W6V"/>
                             <constraint firstItem="QJW-mw-sd9" firstAttribute="leading" secondItem="eRF-gc-9wR" secondAttribute="leadingMargin" constant="-16" id="Wxa-kf-fhR"/>
                             <constraint firstItem="wkb-mg-2IU" firstAttribute="leading" secondItem="eRF-gc-9wR" secondAttribute="leadingMargin" constant="3" id="ckM-uC-p1y"/>
-                            <constraint firstItem="Sak-u1-2jU" firstAttribute="baseline" secondItem="wkb-mg-2IU" secondAttribute="baseline" id="n0s-EY-Ydf"/>
+                            <constraint firstItem="Sak-u1-2jU" firstAttribute="baseline" secondItem="wkb-mg-2IU" secondAttribute="baseline" constant="26" id="n0s-EY-Ydf"/>
                             <constraint firstItem="Sak-u1-2jU" firstAttribute="top" secondItem="wkb-mg-2IU" secondAttribute="top" id="omP-yv-oiE"/>
                             <constraint firstItem="A77-AF-Oct" firstAttribute="top" secondItem="wkb-mg-2IU" secondAttribute="bottom" constant="22" id="w4g-Lc-CTr"/>
                         </constraints>
@@ -505,7 +505,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Camera Icon" width="204" height="204"/>
+        <image name="Camera Icon" width="50" height="38"/>
         <image name="Cross" width="128" height="128"/>
         <image name="Reminder BG" width="1244" height="2210"/>
         <image name="uploadistLogo" width="28" height="42"/>

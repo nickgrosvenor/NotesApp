@@ -242,7 +242,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                         }
                     }
                     else{
-                        obj["ImageFileData"] = nil
                         
                         obj.saveInBackgroundWithBlock {
                             (success: Bool, error: NSError!) -> Void in
@@ -315,8 +314,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         }
         else{
             
-            testObject["ImageFileData"] = nil
-            
             testObject.saveInBackgroundWithBlock {
                 (success: Bool, error: NSError!) -> Void in
                 if (success) {
@@ -341,6 +338,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("ShowDetailsCell") as ShowDetailsCell
         
+        cellImageView.image = nil
+        noteTextView.text = ""
         shareButton.hidden = false
         
         let date = tableData[indexPath.row] as NSDate
@@ -388,7 +387,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             cell.noteLbl.text = noteData
         }else{
             cell.noteLbl.text = ""
-            // open keyboard
         }
         
 //        if cell.noteLbl.text != nil {
@@ -423,11 +421,9 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     @IBAction func shareButtonPressed(sender: AnyObject){
-       // share(sender)
         
         var noteText = noteTextView
         let myWebsite = NSURL(string: "http.//www.google.com")!
-//        var noteImage : UIImage = UIImage()
         var objectToShare = [noteText, myWebsite]
         
         let activityVC: UIActivityViewController = UIActivityViewController(activityItems: objectToShare, applicationActivities: nil)

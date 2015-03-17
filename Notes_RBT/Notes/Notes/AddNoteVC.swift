@@ -225,8 +225,6 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         }
         else{
             
-            testObject["ImageFileData"] = nil
-            
             testObject.saveInBackgroundWithBlock {
                 (success: Bool, error: NSError!) -> Void in
                 if (success) {
