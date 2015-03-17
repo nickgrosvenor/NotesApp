@@ -37,6 +37,7 @@
 		8053DAF31AB41361001A3ED4 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8053DAE71AB41361001A3ED4 /* SystemConfiguration.framework */; };
 		8053DAFF1AB413B7001A3ED4 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8053DAFE1AB413B7001A3ED4 /* Social.framework */; };
 		8053DB051AB414AF001A3ED4 /* JHProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053DB041AB414AF001A3ED4 /* JHProgressHUD.swift */; };
+		B27287471AB76E740025F3A0 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27287461AB76E740025F3A0 /* ImageCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		8053DAFE1AB413B7001A3ED4 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		8053DB011AB41416001A3ED4 /* Notes-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Notes-Bridging-Header.h"; sourceTree = "<group>"; };
 		8053DB041AB414AF001A3ED4 /* JHProgressHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JHProgressHUD.swift; sourceTree = "<group>"; };
+		B27287461AB76E740025F3A0 /* ImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +190,7 @@
 		77A8E3611AB409F400BC058A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B27287461AB76E740025F3A0 /* ImageCell.swift */,
 				8053DB011AB41416001A3ED4 /* Notes-Bridging-Header.h */,
 				77A8E35A1AB409F000BC058A /* ShowDetailsCell.swift */,
 				77A8E35B1AB409F000BC058A /* TableViewCell.swift */,
@@ -322,6 +325,7 @@
 			files = (
 				77A8E33A1AB4075600BC058A /* ViewController.swift in Sources */,
 				77A8E35F1AB409F000BC058A /* ShowDetailsCell.swift in Sources */,
+				B27287471AB76E740025F3A0 /* ImageCell.swift in Sources */,
 				77A8E35C1AB409F000BC058A /* ShowNotesVC.swift in Sources */,
 				77A8E35E1AB409F000BC058A /* OptionVC.swift in Sources */,
 				77A8E35D1AB409F000BC058A /* AddNoteVC.swift in Sources */,
