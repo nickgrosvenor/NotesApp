@@ -34,7 +34,6 @@ class OptionVC: UIViewController {
                 datePicker.hidden = false;
             }
             else{
-                
                 var alert = UIAlertView(title: "Reminder Ser", message: String(format: "Reminder Set for %@", datePicker.date), delegate: nil, cancelButtonTitle: "OK")
                 alert.show()
                 

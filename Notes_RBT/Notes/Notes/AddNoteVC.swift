@@ -32,6 +32,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     @IBOutlet weak var backViewOfTV: UIView!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var crossButton: UIButton!
+    @IBOutlet var cameraButton: UIButton!
     @IBOutlet var placeholderLabel: UILabel!
     @IBOutlet var imageView: UIImageView!
  
@@ -39,7 +40,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+       
         if(crossButton != nil) {
             crossButton.hidden = true
         }
@@ -54,14 +55,17 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             if !textView.text.isEmpty {
                 var textLength = countElements(textView.text)
                 
-                if textLength > 50 {
-                    textView.font = UIFont.boldSystemFontOfSize(12)
+                if textLength > 35 {
+                    textView.font = UIFont.boldSystemFontOfSize(20)
                 }else{
                     textView.font = UIFont.boldSystemFontOfSize(30)
                 }
             }
         }
+        
 
+        // Changing textview text color
+        changeTextColor()
         
         var date = NSDate()
         let dateFormter = NSDateFormatter()
@@ -87,36 +91,42 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             }
         }
         
-        // Changing textview text color
-        changeTextColor()
         
         rightbarBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "checkForInsertUpdateInParse")
         navigationItem.rightBarButtonItems = [rightbarBtn]
+      
         
-        // Change the background colour of backViewOfTV when image is Added
+        // Dismiss Keyboard
+        let aSelector : Selector = "touchOutsideTextView"
+        let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
+        tapGesture.numberOfTapsRequired = 1
+        view.addGestureRecognizer(tapGesture)
     }
     
     
+    func touchOutsideTextView(){
+        self.view.endEditing(true)
+    }
+
+    
     func changeTextColor(){
-        if(imageView != nil){
-            if(imageView.image == nil){
-                if(textView.text == "Write Here ....."){
-                    textView.textColor = UIColor.lightGrayColor()
-                }else{
-                    textView.textColor = UIColor.blackColor()
-                    placeholderLabel.textColor = UIColor.blackColor()
-                }
-                println("When nil: \(imageView.image)")
+        if(imageView.image == nil){
+            if(textView.text == "Write Here ....."){
+                textView.textColor = UIColor.lightGrayColor()
             }else{
-                if(textView.text == "Write Here ....."){
-                    textView.textColor = UIColor.lightGrayColor()
-                }
-                else{
-                    textView.textColor = UIColor.whiteColor()
-                    placeholderLabel.textColor = UIColor.whiteColor()
-                }
-                println("With image: \(imageView.image)")
+                textView.textColor = UIColor.blackColor()
+                placeholderLabel.textColor = UIColor.blackColor()
             }
+                    println("When nil: \(imageView.image)")
+        }else{
+            if(textView.text == "Write Here ....."){
+                textView.textColor = UIColor.lightGrayColor()
+            }else{
+                textView.textColor = UIColor.whiteColor()
+                placeholderLabel.textColor = UIColor.whiteColor()
+            }
+           
+            println("With image: \(imageView.image)")
         }
     }
     
@@ -172,7 +182,6 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     } // End of Method
     
     
-    
     func saveDataInParse(){
     
         var imageFile : PFFile!
@@ -208,16 +217,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         }
     }
     
-    
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool{
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false
-        }
-        return true
-    }
-
-    
+ 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -239,42 +239,9 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         loadImage()
     }
     
+
     
-    
-/*    @IBAction func doneButtonPressed(sender: UIBarButtonItem){
-        // TODO : Place a Progress Hud here
-        
-        JHProgressHUD.sharedHUD.showInView(self.view, withHeader: "Loading", andFooter: "Please Wait")
-        //       JHProgressHUD.sharedHUD.showInView(self.view)
-        
-        var imageFile : PFFile!
-        var testObject : PFObject = PFObject(className: "NotesApp")
-        testObject["User"] = PFUser.currentUser()
-        testObject["Note"] = textView.text
-        testObject["Date"] = dateTitle
-        
-        if(bgImage != nil){
-            var imageData = UIImagePNGRepresentation(bgImage)
-            var imageFile = PFFile(name:"Image.png", data:imageData)
-            testObject["ImageFileData"] = imageFile
-        }
-        
-        testObject.saveInBackgroundWithBlock {
-            (success: Bool, error: NSError!) -> Void in
-            if (success) {
-                println("Success")
-                self.navigationController?.popViewControllerAnimated(true)
-            } else {
-                println(error.userInfo)
-                self.navigationController?.popViewControllerAnimated(true)
-            }
-        }
-    }
-*/
-    
-    
-    internal func loadImage()
-    {
+    internal func loadImage(){
         var imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
@@ -286,10 +253,10 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     {
         bgImage = info[UIImagePickerControllerOriginalImage] as UIImage
         imageView.image = bgImage
-        imageView.contentMode = UIViewContentMode.Center
+        imageView.contentMode = UIViewContentMode.ScaleAspectFit
         imageView.frame = CGRectMake(0, 0, imageView.frame.size.width, imageView.frame.size.height)
         centerImageViewContents()
-        
+       
         if(imageView.image == nil){
             textView.textColor = UIColor.blackColor()
             placeholderLabel.textColor = UIColor.blackColor()
@@ -327,7 +294,11 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     func textViewDidBeginEditing(te: UITextView) {
         if textView.text == "Write Here ....." {
             textView.text = nil
-            textView.textColor = UIColor.blackColor()
+            if(imageView.image == nil){
+                textView.textColor = UIColor.blackColor()
+            }else{
+                textView.textColor = UIColor.whiteColor()
+            }
         }
     }
     
@@ -338,6 +309,65 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             textView.textColor = UIColor.lightGrayColor()
         }
     }
+  
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool{
+        resizeTextSize()
+        
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+
+    
+    func resizeTextSize(){
+        var textLength = countElements(textView.text)
+//        println(textLength)
+        
+        if textLength > 35 {
+            textView.font = UIFont.boldSystemFontOfSize(20)
+//            println("Font: \(textView.font)")
+        }else{
+            textView.font = UIFont.boldSystemFontOfSize(30)
+        }
+        
+    }
+    
+    
+    
+    
+    /*    @IBAction func doneButtonPressed(sender: UIBarButtonItem){
+    // TODO : Place a Progress Hud here
+    
+    JHProgressHUD.sharedHUD.showInView(self.view, withHeader: "Loading", andFooter: "Please Wait")
+    //       JHProgressHUD.sharedHUD.showInView(self.view)
+    
+    var imageFile : PFFile!
+    var testObject : PFObject = PFObject(className: "NotesApp")
+    testObject["User"] = PFUser.currentUser()
+    testObject["Note"] = textView.text
+    testObject["Date"] = dateTitle
+    
+    if(bgImage != nil){
+    var imageData = UIImagePNGRepresentation(bgImage)
+    var imageFile = PFFile(name:"Image.png", data:imageData)
+    testObject["ImageFileData"] = imageFile
+    }
+    
+    testObject.saveInBackgroundWithBlock {
+    (success: Bool, error: NSError!) -> Void in
+    if (success) {
+    println("Success")
+    self.navigationController?.popViewControllerAnimated(true)
+    } else {
+    println(error.userInfo)
+    self.navigationController?.popViewControllerAnimated(true)
+    }
+    }
+    }
+    */
     
     
 }

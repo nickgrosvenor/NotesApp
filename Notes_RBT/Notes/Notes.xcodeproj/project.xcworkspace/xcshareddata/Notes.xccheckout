@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>0001DEED-D563-472A-B3B1-B116CF5F7DFF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Notes</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>88FD5101621E7249132C3F9C25FEBB3238E76253</key>
+		<string>https://github.com/nickgrosvenor/NotesApp.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Notes_RBT/Notes/Notes.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>88FD5101621E7249132C3F9C25FEBB3238E76253</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/nickgrosvenor/NotesApp.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>88FD5101621E7249132C3F9C25FEBB3238E76253</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>88FD5101621E7249132C3F9C25FEBB3238E76253</string>
+			<key>IDESourceControlWCCName</key>
+			<string>NotesApp</string>
+		</dict>
+	</array>
+</dict>
+</plist>

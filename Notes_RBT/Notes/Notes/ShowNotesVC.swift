@@ -32,26 +32,16 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+       
         shareButton.hidden = false
         removeButton.hidden = true
-        
+       
         tableView.pagingEnabled = true
         tableView.dataSource = self
         tableView.delegate = self
 
         self.noteTextView.delegate = self
         noteTextView.userInteractionEnabled = true
-        noteTextView.editable = false
-      
-        // Auto-resize textfield
-        autoResizeText()
-        
-        if(!noteTextView.text.isEmpty){
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self.noteTextView, action: "showPopupWithText:")
-            tapGestureRecognizer.numberOfTapsRequired = 2
-            noteTextView.addGestureRecognizer(tapGestureRecognizer)
-        }
         
         // Change textview text color
         changeTextColor()
@@ -92,21 +82,20 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                 var d2 = dateFormter.stringFromDate(NSDate())
                 
                 var dateComparisionResult:NSComparisonResult = d2.compare(d1)
-                if dateComparisionResult == NSComparisonResult.OrderedSame
-                {
+                if dateComparisionResult == NSComparisonResult.OrderedSame {
                     navTitle = dateFormter.stringFromDate(tableData[i])
                     currentElement  = i
                 }
             }
         }
         
-        
         let indexPath = NSIndexPath(forRow: currentElement, inSection: 0)
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
         
-        // Move camera view when keyboard appears
+        // Move view when keyboard appears
         moveViewForKeyboard()
         
+        // Dismiss Keyboard
         let aSelector : Selector = "touchOutsideTextView"
         let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
         tapGesture.numberOfTapsRequired = 1
@@ -118,7 +107,9 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
          self.view.endEditing(true)
     }
     
+    
     func showPopupWithText() {
+        println("Pop UP")
         var popUpView = UIView()
         popUpView.frame = CGRectMake(UIScreen.mainScreen().bounds.width/2-100, UIScreen.mainScreen().bounds.height/2-125, 200, 250)
         popUpView.backgroundColor = UIColor.grayColor()
@@ -137,17 +128,17 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     func editClicked(){
         noteTextView.editable = true
+        shareButton.hidden = true
+        removeButton.hidden = false
         
         if(self.navigationItem.rightBarButtonItem?.title == "Done"){
             self.navigationItem.rightBarButtonItem?.title = "Edit"
+            touchOutsideTextView()
             updateDataInParse()
         }else{
             self.navigationItem.rightBarButtonItem?.title = "Done"
             noteTextView.becomeFirstResponder()
         }
-        
-        removeButton.hidden = false
-        println("Edit clicked")
     }
     
     
@@ -161,11 +152,9 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
 
-    
     func updateDataInParse(){
-        JHProgressHUD.sharedHUD.showInView(UIApplication.sharedApplication().keyWindow!, withHeader: "Saving", andFooter: "")
         
-        println(navTitle)
+        JHProgressHUD.sharedHUD.showInView(UIApplication.sharedApplication().keyWindow!, withHeader: "Saving", andFooter: "")
         
         var query = PFQuery(className: "NotesApp")
         query.whereKey("User", equalTo: PFUser.currentUser())
@@ -188,6 +177,10 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                         var imageFile = PFFile(name:"Image.png", data:imageData)
                         obj["ImageFileData"] = imageFile
                     }
+                    else{
+                        obj["ImageFileData"] = nil
+
+                    }
         
                     obj.saveInBackgroundWithBlock {
                         (success: Bool, error: NSError!) -> Void in
@@ -203,9 +196,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                 }
                 else{
                     self.saveDataInParse()
-                    // Add Data in 
-                    
-//                    self.hideHud()
                 }
             }
             else{
@@ -214,6 +204,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         }
 
     }
+    
     
     func saveDataInParse(){
         
@@ -256,6 +247,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("ShowDetailsCell") as ShowDetailsCell
         
+        shareButton.hidden = false
+        
         let date = tableData[indexPath.row] as NSDate
         let userCalendar = NSCalendar.currentCalendar()
         var dateComp = userCalendar.components(.CalendarUnitDay | .CalendarUnitWeekday, fromDate: date)
@@ -283,8 +276,14 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                         if (error == nil && imageData != nil) {
                             let image = UIImage(data:imageData)
                             cell.bgImage.image = image
-                            cell.noteLbl.textColor = UIColor.whiteColor()
-                        }
+                            self.changeTextColor()
+
+                            if(cell.bgImage.image != nil){
+                                self.removeButton.setBackgroundImage(cell.bgImage.image, forState: UIControlState.Normal)
+                            }else{
+                                self.removeButton.setBackgroundImage(UIImage(named:"Camera Icon"), forState: UIControlState.Normal)
+                            }
+                         }
                     })
                     break
                 }
@@ -297,15 +296,18 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             cell.noteLbl.text = ""
         }
         
-        if(cell.bgImage.image == nil){
-            removeButton.setTitle("Camera", forState: UIControlState.Normal)
-        }else{
-            removeButton.setTitle("Remove", forState: UIControlState.Normal)
+        if cell.noteLbl.text != nil {
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "showPopupWithText:")
+            tapGestureRecognizer.numberOfTapsRequired = 1
+            cell.noteLbl.addGestureRecognizer(tapGestureRecognizer)
         }
-        
+       
         cellImageView = cell.bgImage
         noteTextView = cell.noteLbl
         
+        autoResizeText()
+        changeTextColor()
+      
         return cell
     }
     
@@ -355,65 +357,11 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             self.presentViewController(activityVC, animated: true, completion: nil)
         }
     }
-    
-    
-  /*  func share(sender: AnyObject) {
-        //  if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-        self.navigationController?.presentViewController(activityViewController, animated: true, completion: nil)
-        //  } else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-        //        iPad(sender)
-        //   }
-    }
-    
-    
-    lazy var activityPopover: UIPopoverController = {
-        return UIPopoverController(contentViewController: self.activityViewController)
-        }()
-    
-    lazy var activityViewController: UIActivityViewController = {
-        return self.createActivityController()
-        }()
-    
-    
-    func createActivityController() -> UIActivityViewController {
-        var noteText = noteTextView
-       
-       let myWebsite = NSURL(string: "http.//www.google.com")!
-     //   var noteImage = cellImageView.image
-        
-        var objectToShare = [noteText, myWebsite]
-            
-        let activityVC: UIActivityViewController = UIActivityViewController(activityItems: objectToShare, applicationActivities: nil)
-            
-        activityVC.excludedActivityTypes = [
-            UIActivityTypeMessage,
-            UIActivityTypeMail,
-            UIActivityTypePostToTwitter,
-            UIActivityTypePostToFacebook,
-            UIActivityTypeSaveToCameraRoll,
-            UIActivityTypeAssignToContact,
-            UIActivityTypeCopyToPasteboard,
-            UIActivityTypePrint
-        ]
-        
-  /*      activityVC.completionHandler = {(activityType, completed:Bool) in
-            if !completed{
-                println("Cancelled")
-            }
-            
-            if activityType == UIActivityTypePostToTwitter{
-                println("twitter")
-            }
-        }   */
-  //      self.presentViewController(activityVC, animated: true, completion: nil)
-        return activityViewController
-    }
-    
-    */
+ 
     
     @IBAction func removeButtonPressed(sender: AnyObject) {
+        
         if(cellImageView.image == nil){
-       //     addNoteObject.loadImage()
             loadImage()
         }else{
             removePhoto()
@@ -434,15 +382,16 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     {
         var bgImage = info[UIImagePickerControllerOriginalImage] as UIImage
         cellImageView.image = bgImage
-        cellImageView.contentMode = UIViewContentMode.Center
+        cellImageView.contentMode = UIViewContentMode.ScaleToFill
         cellImageView.frame = CGRectMake(0, 0, cellImageView.frame.size.width, cellImageView.frame.size.height)
-        centerImageViewContents()
         
         if(cellImageView.image == nil){
             noteTextView.textColor = UIColor.blackColor()
         }else{
             noteTextView.textColor = UIColor.whiteColor()
         }
+        
+        self.removeButton.setBackgroundImage(cellImageView.image, forState: UIControlState.Normal)
         
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -469,15 +418,24 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         cellImageView.frame = contentsFrame
     }
     
-
+  
     func removePhoto(){
         let optionMenu: UIAlertController = UIAlertController()
         
         let deleteAction = UIAlertAction(title: "Remove Photo", style: .Default, handler: {
             (alert: UIAlertAction!) -> Void in
             println("File Deleted")
-            // Update in parse
-            self.updateDataInParse()
+            self.cellImageView.image = nil
+
+            var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
+//            self.tableView.reloadRowsAtIndexPaths(indexPaths, withRowAnimation: UITableViewRowAnimation.Fade)
+            
+//            self.tableView.cellForRowAtIndexPath(indexPaths)
+            var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
+            cell.noteLbl.textColor = UIColor.blackColor()
+            
+            self.removeButton.setBackgroundImage(UIImage(named:"Camera Icon"), forState: UIControlState.Normal)
+            self.touchOutsideTextView()
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
@@ -499,22 +457,23 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         alert.show()
     }
     
-    
-//    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-////        self.noteTextView.endEditing(true)
-//        println("Here")
-//        noteTextView.editable = false
-//    }
-//    
    
     func keyboardWillShow(sender: NSNotification) {
         self.removeButton.frame.origin.y -= 255
         tableView.scrollEnabled = false
     }
+   
     
     func keyboardWillHide(sender: NSNotification) {
         self.removeButton.frame.origin.y += 255
         tableView.scrollEnabled = true
+        
+        if(self.navigationItem.rightBarButtonItem?.title == "Done"){
+            self.navigationItem.rightBarButtonItem?.title = "Edit"
+        }else{
+            self.navigationItem.rightBarButtonItem?.title = "Done"
+        }
+        
     }
 
     
@@ -537,15 +496,16 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func autoResizeText(){
-        if !noteTextView.text.isEmpty {
-            var textLength = countElements(noteTextView.text)
+        noteTextView.textAlignment = NSTextAlignment.Center
         
-            if textLength > 50 {
-                noteTextView.font = UIFont.boldSystemFontOfSize(12)
-            }else{
-                noteTextView.font = UIFont.boldSystemFontOfSize(30)
-            }
+        var textLength = countElements(noteTextView.text)
+       
+        if textLength > 35 {
+            noteTextView.font = UIFont.boldSystemFontOfSize(20)
+         }else{
+            noteTextView.font = UIFont.boldSystemFontOfSize(30)
         }
+
     }
     
     
@@ -553,5 +513,4 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
     }
-    
 }

@@ -275,14 +275,17 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             
             if isfound {
                 cell.noteLabel.text = noteData
-            }
-            else{
+            }else{
                 cell.noteLabel.text = ""
             }
             
             cell.dateLabel.textColor = UIColor.whiteColor()
             cell.weekDayLbl.textColor = UIColor.whiteColor()
             cell.noteLabel.textColor = UIColor.whiteColor()
+            
+            cell.dateLabel.font = UIFont(name: "HelveticaNeue-Ultralight", size: 32)
+            cell.weekDayLbl.font = UIFont(name: "HelveticaNeue-Light", size: 12)
+            cell.noteLabel.font = UIFont(name: "HelveticaNeue-Light", size: 20)
             
             cell.backgroundColor = UIColor.clearColor()
             return cell
@@ -309,8 +312,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if(tableView.tag == 100){
+          if(tableView.tag == 100){
             return bgImages.count
         }
         else{
@@ -319,8 +321,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
-        if(tableView.tag == 100){
+      if(tableView.tag == 100){
             return 1
         }
         else{
@@ -334,7 +335,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         var label = UILabel()
         label.frame = CGRectMake(0, 0, tableView.frame.width, 50)
         label.textAlignment = NSTextAlignment.Center
-        label.font = UIFont.systemFontOfSize(30)
+        label.font = UIFont(name: "HelveticaNeue-Thin", size: 30)
         label.text = getMonthName(monthSection[section])
         label.textColor = UIColor.whiteColor()
         view.addSubview(label)
@@ -371,7 +372,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         //                getDateData(true)
         //            }
         //        }
-        
         
         thresoldHeight = scrollView.frame.size.height
         if(scrollView == self.tableView) {
@@ -457,7 +457,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             }
         }
         
-        
         if (isfound){
             let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ShowNoteVC") as ShowNotesVC
             vc.dateArray = dateArray
@@ -475,7 +474,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     
     @IBAction func openOptionVC(sender: AnyObject) {
-        
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("OptionVC") as OptionVC
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -483,8 +481,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func fetchDataFromParse()
     {
-        
-        
         self.parseData.removeAll()
         JHProgressHUD.sharedHUD.showInView(UIApplication.sharedApplication().keyWindow!, withHeader: "Loading", andFooter: "")
         
@@ -523,8 +519,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     JHProgressHUD.sharedHUD.hide()
                     let indexPath = NSIndexPath(forRow:self.indexValue, inSection: self.sectionValue)
                     self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-                    
-                    
                 })
             }
             else{
