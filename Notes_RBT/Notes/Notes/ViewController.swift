@@ -373,21 +373,21 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         //            }
         //        }
         
-        thresoldHeight = scrollView.frame.size.height
-        if(scrollView == self.tableView) {
-            if(scrollView.contentOffset.y > thresoldHeight){
-                thresoldHeight = 568//scrollView.contentOffset.y + scrollView.frame.size.height
-                visibleBGCells++
-                if(visibleBGCells >= 4){
-                    visibleBGCells = 0
-                }
-                
-                println(visibleBGCells)
-                
-                var indexPath = NSIndexPath(forRow: visibleBGCells, inSection: 0)
-                bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
-            }
-        }
+//        thresoldHeight = scrollView.frame.size.height
+//        if(scrollView == self.tableView) {
+//            if(scrollView.contentOffset.y > thresoldHeight){
+//                thresoldHeight = 568//scrollView.contentOffset.y + scrollView.frame.size.height
+//                visibleBGCells++
+//                if(visibleBGCells >= 4){
+//                    visibleBGCells = 0
+//                }
+//                
+//                println(visibleBGCells)
+//                
+//                var indexPath = NSIndexPath(forRow: visibleBGCells, inSection: 0)
+//                bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+//            }
+//        }
     }
     
     
