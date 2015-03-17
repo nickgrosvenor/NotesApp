@@ -92,7 +92,9 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         }
         
         
-        rightbarBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "checkForInsertUpdateInParse")
+//        rightbarBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "checkForInsertUpdateInParse")
+        rightbarBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "saveDataInParse")
+        
         navigationItem.rightBarButtonItems = [rightbarBtn]
       
         
@@ -198,22 +200,45 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             var imageData = UIImagePNGRepresentation(bgImage)
             var imageFile = PFFile(name:"Image.png", data:imageData)
             testObject["ImageFileData"] = imageFile
+            
+            imageFile.saveInBackgroundWithBlock {
+                (success: Bool, error: NSError!) -> Void in
+                if (success) {
+                    
+                    testObject.saveInBackgroundWithBlock {
+                        (success: Bool, error: NSError!) -> Void in
+                        if (success) {
+                            JHProgressHUD.sharedHUD.hide()
+                            self.navigationController?.popViewControllerAnimated(true)
+                        } else {
+                            JHProgressHUD.sharedHUD.hide()
+                            let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
+                            alert.show()
+                        }
+                    }
+                } else {
+                    JHProgressHUD.sharedHUD.hide()
+                    let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
+                    alert.show()
+                }
+            }
         }
-        
-        
-        
-        testObject.saveInBackgroundWithBlock {
-            (success: Bool, error: NSError!) -> Void in
-            if (success) {
-                JHProgressHUD.sharedHUD.hide()
-                self.navigationController?.popViewControllerAnimated(true)
-            } else {
-                JHProgressHUD.sharedHUD.hide()
-                let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
-                alert.show()
+        else{
+            
+            testObject["ImageFileData"] = nil
+            
+            testObject.saveInBackgroundWithBlock {
+                (success: Bool, error: NSError!) -> Void in
+                if (success) {
+                    JHProgressHUD.sharedHUD.hide()
+                    self.navigationController?.popViewControllerAnimated(true)
+                } else {
+                    JHProgressHUD.sharedHUD.hide()
+                    let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
+                    alert.show()
+                }
             }
             
-
         }
     }
     
@@ -324,11 +349,9 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     
     func resizeTextSize(){
         var textLength = countElements(textView.text)
-//        println(textLength)
         
         if textLength > 35 {
             textView.font = UIFont.boldSystemFontOfSize(20)
-//            println("Font: \(textView.font)")
         }else{
             textView.font = UIFont.boldSystemFontOfSize(30)
         }

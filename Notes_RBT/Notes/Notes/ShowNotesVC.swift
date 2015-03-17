@@ -43,6 +43,16 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         self.noteTextView.delegate = self
         noteTextView.userInteractionEnabled = true
         
+        
+        // Move view when keyboard appears
+        moveViewForKeyboard()
+        
+        // Dismiss Keyboard
+        let aSelector : Selector = "touchOutsideTextView"
+        let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
+        tapGesture.numberOfTapsRequired = 1
+        view.addGestureRecognizer(tapGesture)
+        
         // Change textview text color
         changeTextColor()
         
@@ -92,16 +102,51 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         let indexPath = NSIndexPath(forRow: currentElement, inSection: 0)
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
         
-        // Move view when keyboard appears
-        moveViewForKeyboard()
         
-        // Dismiss Keyboard
-        let aSelector : Selector = "touchOutsideTextView"
-        let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
-        tapGesture.numberOfTapsRequired = 1
-        view.addGestureRecognizer(tapGesture)
+        
+        
     }
 
+    override func viewDidAppear(animated: Bool) {
+        var checkBool = checkDataContains()
+        
+        if(!checkBool){
+            editClicked()
+        }
+    }
+    
+    func checkDataContains()->Bool{
+        
+        let date = tableData[currentElement] as NSDate
+        let userCalendar = NSCalendar.currentCalendar()
+        var dateComp = userCalendar.components(.CalendarUnitDay | .CalendarUnitWeekday, fromDate: date)
+        var day = dateComp.day
+        var weekDay = dateComp.weekday
+        
+        
+        var title = dateFormter.stringFromDate(date)
+        self.navigationItem.title = title
+        
+        var isfound = false
+        var noteData = ""
+        if(parseData.count>0)
+        {
+            for (var i=0;i<parseData.count;i++) {
+                var dict: (AnyObject) = parseData[i]
+                
+                if ( dict["Date"] as String == title ){
+                    isfound = true
+                    noteData = dict["Note"] as String
+                    
+                    let bgimage = dict["Image"] as PFFile
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    
     
     func touchOutsideTextView(){
          self.view.endEditing(true)
@@ -110,10 +155,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     func showPopupWithText() {
         println("Pop UP")
-        var popUpView = UIView()
-        popUpView.frame = CGRectMake(UIScreen.mainScreen().bounds.width/2-100, UIScreen.mainScreen().bounds.height/2-125, 200, 250)
+        var popUpView = UIView(frame: CGRectMake(UIScreen.mainScreen().bounds.width/2-100, UIScreen.mainScreen().bounds.height/2-125, 200, 250))
         popUpView.backgroundColor = UIColor.grayColor()
-
        
         var noteText = UITextView(frame: CGRectMake(popUpView.frame.width/2-90, popUpView.frame.height/2-110, 180, 380))
         noteText.text = noteTextView.text
@@ -144,7 +187,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool{
         if text == "\n" {
-            println("Here")
             textView.resignFirstResponder()
             return false
         }
@@ -176,22 +218,44 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                         var imageData = UIImagePNGRepresentation(self.cellImageView.image)
                         var imageFile = PFFile(name:"Image.png", data:imageData)
                         obj["ImageFileData"] = imageFile
+                        
+                        imageFile.saveInBackgroundWithBlock {
+                            (success: Bool, error: NSError!) -> Void in
+                            if (success) {
+                                
+                                obj.saveInBackgroundWithBlock {
+                                    (success: Bool, error: NSError!) -> Void in
+                                    if (success) {
+                                        JHProgressHUD.sharedHUD.hide()
+                                        self.navigationController?.popViewControllerAnimated(true)
+                                    } else {
+                                        JHProgressHUD.sharedHUD.hide()
+                                        let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
+                                        alert.show()
+                                    }
+                                }
+                            } else {
+                                JHProgressHUD.sharedHUD.hide()
+                                let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
+                                alert.show()
+                            }
+                        }
                     }
                     else{
                         obj["ImageFileData"] = nil
-
-                    }
-        
-                    obj.saveInBackgroundWithBlock {
-                        (success: Bool, error: NSError!) -> Void in
-                        if (success) {
-                            JHProgressHUD.sharedHUD.hide()
-                            self.navigationController?.popViewControllerAnimated(true)
-                        } else {
-                            JHProgressHUD.sharedHUD.hide()
-                            let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
-                            alert.show()
+                        
+                        obj.saveInBackgroundWithBlock {
+                            (success: Bool, error: NSError!) -> Void in
+                            if (success) {
+                                JHProgressHUD.sharedHUD.hide()
+                                self.navigationController?.popViewControllerAnimated(true)
+                            } else {
+                                JHProgressHUD.sharedHUD.hide()
+                                let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
+                                alert.show()
+                            }
                         }
+
                     }
                 }
                 else{
@@ -222,19 +286,49 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             var imageData = UIImagePNGRepresentation(self.cellImageView.image)
             var imageFile = PFFile(name:"Image.png", data:imageData)
             testObject["ImageFileData"] = imageFile
-        }
-        
-        testObject.saveInBackgroundWithBlock {
-            (success: Bool, error: NSError!) -> Void in
-            if (success) {
-                JHProgressHUD.sharedHUD.hide()
-                self.navigationController?.popViewControllerAnimated(true)
-            } else {
-                JHProgressHUD.sharedHUD.hide()
-                let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
-                alert.show()
+            
+            imageFile.saveInBackgroundWithBlock {
+                (success: Bool, error: NSError!) -> Void in
+                if (success) {
+                    
+                    testObject.saveInBackgroundWithBlock {
+                        (success: Bool, error: NSError!) -> Void in
+                        if (success) {
+                            JHProgressHUD.sharedHUD.hide()
+                            self.navigationController?.popViewControllerAnimated(true)
+                        } else {
+                            JHProgressHUD.sharedHUD.hide()
+                            let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
+                            alert.show()
+                        }
+                        
+                    }
+                } else {
+                    JHProgressHUD.sharedHUD.hide()
+                    let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
+                    alert.show()
+                }
+                
             }
             
+            
+        }
+        else{
+            
+            testObject["ImageFileData"] = nil
+            
+            testObject.saveInBackgroundWithBlock {
+                (success: Bool, error: NSError!) -> Void in
+                if (success) {
+                    JHProgressHUD.sharedHUD.hide()
+                    self.navigationController?.popViewControllerAnimated(true)
+                } else {
+                    JHProgressHUD.sharedHUD.hide()
+                    let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
+                    alert.show()
+                }
+                
+            }
         }
     }
     
@@ -294,13 +388,14 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             cell.noteLbl.text = noteData
         }else{
             cell.noteLbl.text = ""
+            // open keyboard
         }
         
-        if cell.noteLbl.text != nil {
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "showPopupWithText:")
-            tapGestureRecognizer.numberOfTapsRequired = 1
-            cell.noteLbl.addGestureRecognizer(tapGestureRecognizer)
-        }
+//        if cell.noteLbl.text != nil {
+//            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "showPopupWithText")
+//            tapGestureRecognizer.numberOfTapsRequired = 1
+//            cell.noteLbl.addGestureRecognizer(tapGestureRecognizer)
+//        }
        
         cellImageView = cell.bgImage
         noteTextView = cell.noteLbl
