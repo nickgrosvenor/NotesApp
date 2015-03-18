@@ -437,6 +437,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             cell.noteLbl.text = ""
         }
         
+        cell.bgImage.image = nil
+        
         if cell.noteLbl.text != "" {
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "showPopupWithText")
             tapGestureRecognizer.numberOfTapsRequired = 2
