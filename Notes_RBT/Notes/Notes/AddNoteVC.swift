@@ -27,7 +27,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     var bgImage: UIImage!
     var rightbarBtn = UIBarButtonItem()
     var placeholderArray : [String] = ["What’d you do?","What upset you?","Learn anything?","Buy anything?","Go anywhere?","Looking forward to anything?","Talk to anyone different?","New ideas?","Tell me about this fine day?"]
-    
+     var bgImages = ["1BG.png","2BG.png","3BG.png","4BG.png","5BG.png","6BG.png","7BG.png","8BG.png","9BG.png","10BG.png","11BG.png","12BG.png","13BG.png","14BG.png","15BG.png","16BG.png","17BG.png","18BG.png","19BG.png","20BG.png","21BG.png","22BG.png","23BG.png","24BG.png","25BG.png","26BG.png","27BG.png","28BG.png","29BG.png","30BG.png","31BG.png","32BG.png","33BG.png","34BG.png","35BG.png","36BG.png","37BG.png","38BG.png","39BG.png","40BG.png","41BG.png","42BG.png","44BG.png","45BG.png","46BG.png","47BG.png"] //"43BG.png",
     
     @IBOutlet weak var backViewOfTV: UIView!
     @IBOutlet weak var textView: UITextView!
@@ -35,7 +35,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     @IBOutlet var cameraButton: UIButton!
     @IBOutlet var placeholderLabel: UILabel!
     @IBOutlet var imageView: UIImageView!
- 
+    @IBOutlet var bgView: UIView!
     
     
     override func viewDidLoad() {
@@ -63,7 +63,6 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             }
         }
         
-
         // Changing textview text color
         changeTextColor()
         
@@ -82,6 +81,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             placeholderLabel.userInteractionEnabled = true
             placeholderLabel.numberOfLines = 0
             placeholderLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+       //     placeholderLabel.font = UIFont(name: "HelveticaNeue-Light", size: 9)
             placeholderLabel.sizeToFit()
         
             if(placeholderLabel.hidden == false){
@@ -91,12 +91,8 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             }
         }
         
-        
-//        rightbarBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "checkForInsertUpdateInParse")
-        rightbarBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "saveDataInParse")
-        
+       rightbarBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "saveDataInParse")
         navigationItem.rightBarButtonItems = [rightbarBtn]
-      
         
         // Dismiss Keyboard
         let aSelector : Selector = "touchOutsideTextView"
@@ -156,6 +152,11 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
                         var imageData = UIImagePNGRepresentation(self.bgImage)
                         var imageFile = PFFile(name:"Image.png", data:imageData)
                         obj["ImageFileData"] = imageFile
+                    }else{
+                        self.bgImage = self.getRandomImageFromAssets()
+                        var imageData = UIImagePNGRepresentation(self.bgImage)
+                        var imageFile = PFFile(name:"Random Image.png", data:imageData)
+                        obj["ImageFileData"] = imageFile
                     }
                     
                     obj.saveInBackgroundWithBlock {
@@ -186,6 +187,8 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     
     func saveDataInParse(){
     
+        JHProgressHUD.sharedHUD.showInView(UIApplication.sharedApplication().keyWindow!, withHeader: "Saving", andFooter: "")
+        
         var imageFile : PFFile!
         var testObject : PFObject = PFObject(className: "NotesApp")
         testObject["User"] = PFUser.currentUser()
@@ -241,6 +244,12 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     }
     
  
+    func getRandomImageFromAssets() -> UIImage{
+        var randomIndex = Int(arc4random_uniform(UInt32(bgImages.count)))
+        var noteImage = UIImage(named: "\(bgImages[randomIndex])")
+        return noteImage!
+     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -275,7 +284,9 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject])
     {
         bgImage = info[UIImagePickerControllerOriginalImage] as UIImage
+ 
         imageView.image = bgImage
+        imageView.alpha = 0.75
         imageView.contentMode = UIViewContentMode.ScaleAspectFit
         imageView.frame = CGRectMake(0, 0, imageView.frame.size.width, imageView.frame.size.height)
         centerImageViewContents()
@@ -283,9 +294,11 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         if(imageView.image == nil){
             textView.textColor = UIColor.blackColor()
             placeholderLabel.textColor = UIColor.blackColor()
+            bgView.backgroundColor = UIColor.whiteColor()
         }else{
             textView.textColor = UIColor.whiteColor()
             placeholderLabel.textColor = UIColor.whiteColor()
+            bgView.backgroundColor = UIColor.blackColor()
         }
         
         picker.dismissViewControllerAnimated(true, completion: nil)

@@ -13,6 +13,7 @@ class ShowDetailsCell: UITableViewCell {
 
     @IBOutlet weak var noteLbl: UITextView!
     @IBOutlet weak var bgTextView: UIView!
+    @IBOutlet weak var bgView: UIView!
     @IBOutlet weak var bgImage: UIImageView!
     
     

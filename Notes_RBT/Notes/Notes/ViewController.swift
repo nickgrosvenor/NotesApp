@@ -24,9 +24,12 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var visibleBGCells = 0;
     var nextTimeIndex = 0;
     var nextTimeSection = 0;
-    var thresoldHeight =  CGFloat(0);
+    var thresoldHeight =  CGFloat(0)
+     var currentLocation = CGFloat(0)
     let userCalendar = NSCalendar.currentCalendar()
     let dateFormter = NSDateFormatter()
+    
+   
     
     
     override func viewDidLoad() {
@@ -39,14 +42,11 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let imageView = UIImageView(image:logo)
         self.navigationItem.titleView = imageView
         
-        
         bgTableView.dataSource = self
         bgTableView.delegate = self
-        
-        
+       
         tableView.dataSource = self
         tableView.delegate = self
-        
         
         getDateData(false)
         
@@ -57,17 +57,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         //            self.tableView.backgroundView = bgImageView
         //        }
     }
-    
-    
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool){
-        var bgImageView = UIImageView()
-        for i in 1...bgImages.count {
-            var randomIndex = Int(arc4random_uniform(UInt32(bgImages.count)))
-            bgImageView.image = UIImage(named: "\(bgImages[randomIndex])")
-            self.tableView.backgroundView = bgImageView
-        }
-    }
-
     
     
     override func viewWillAppear(animated: Bool) {
@@ -294,7 +283,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             cell.weekDayLbl.textColor = UIColor.whiteColor()
             cell.noteLabel.textColor = UIColor.whiteColor()
             
-            cell.dateLabel.font = UIFont(name: "HelveticaNeue-Ultralight", size: 34)
+            cell.dateLabel.font = UIFont(name: "HelveticaNeue-Ultralight", size: 32)
             cell.weekDayLbl.font = UIFont(name: "HelveticaNeue-Light", size: 12)
             cell.noteLabel.font = UIFont(name: "HelveticaNeue-Light", size: 20)
             
@@ -323,7 +312,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-          if(tableView.tag == 100){
+        if(tableView.tag == 100){
             return bgImages.count
         }
         else{
@@ -332,7 +321,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-      if(tableView.tag == 100){
+        if(tableView.tag == 100){
             return 1
         }
         else{
@@ -375,32 +364,34 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        //        if(scrollView.contentOffset.y + scrollView.frame.size.height >= scrollView.contentSize.height){
-        
-        // Work for asynchronus Loading
-        //            if !isLoading{
-        //                getDateData(true)
-        //            }
-        //        }
-        
-//        thresoldHeight = scrollView.frame.size.height
-//        if(scrollView == self.tableView) {
-//            if(scrollView.contentOffset.y > thresoldHeight){
-//                thresoldHeight = 568//scrollView.contentOffset.y + scrollView.frame.size.height
-//                visibleBGCells++
-//                if(visibleBGCells >= 4){
-//                    visibleBGCells = 0
-//                }
-//                
-//                println(visibleBGCells)
-//                
-//                var indexPath = NSIndexPath(forRow: visibleBGCells, inSection: 0)
-//                bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
-//            }
-//        }
+    
+    func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
+        currentLocation = scrollView.contentOffset.y
     }
     
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        
+        var currentLocation1 = scrollView.contentOffset.y
+        
+        if currentLocation1 < currentLocation{
+            
+            visibleBGCells--
+            if(visibleBGCells <= 0){
+                visibleBGCells = 0
+            }
+            
+        }else if currentLocation1 > currentLocation{
+            
+            visibleBGCells++
+            if(visibleBGCells >= bgImages.count-1){
+                visibleBGCells = 0
+            }
+            
+        }
+        
+        let indexPath = NSIndexPath(forRow: visibleBGCells, inSection: 0)
+        self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+    }
     
     // Method to get Week Name
     func getDayOfWeek(today: Int) -> String {
@@ -516,11 +507,14 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                         
                         userImageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
                             if error == nil {
-                                if var uploadImage = imageData as NSData! {
-                                    var image = UIImage(data: uploadImage)
-                                    var img: String = "\(uploadImage).png"
-                                    self.bgImages.append(img)
-                                }
+                                
+                                if(imageData == nil){
+                                    if var uploadImage = imageData as NSData! {
+                                        var image = UIImage(data: uploadImage)
+                                        var img: String = "\(uploadImage).png"
+                                        self.bgImages.append(img)
+                                    }
+                                } // Image Data
                             }
                         }
                     }
