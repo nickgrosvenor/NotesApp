@@ -498,7 +498,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                         
                         var userNote = object["Note"] as String
                         var date = object["Date"] as String
-                        var dict = ["Image":userImageFile, "Note":userNote, "Date":date]
+                        var dict = ["Image":userImageFile, "Note":userNote, "Date":date, "isDeleted":object["isDeleted"] as Bool]
                         self.parseData.append(dict)
                         
                         userImageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in

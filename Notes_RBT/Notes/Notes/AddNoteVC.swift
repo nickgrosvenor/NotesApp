@@ -35,7 +35,6 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     @IBOutlet var cameraButton: UIButton!
     @IBOutlet var placeholderLabel: UILabel!
     @IBOutlet var imageView: UIImageView!
-    @IBOutlet var bgView: UIView!
     
     
     override func viewDidLoad() {
@@ -198,6 +197,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             testObject["Note"] = self.textView.text
         }
         testObject["Date"] = dateTitle
+        testObject["isDeleted"] = false
         
         if(bgImage != nil){
             var imageData = UIImagePNGRepresentation(bgImage)
@@ -287,18 +287,18 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
  
         imageView.image = bgImage
         imageView.alpha = 0.75
-        imageView.contentMode = UIViewContentMode.ScaleToFill
+        imageView.contentMode = UIViewContentMode.ScaleAspectFit
         imageView.frame = CGRectMake(0, 0, imageView.frame.size.width, imageView.frame.size.height)
         centerImageViewContents()
        
         if(imageView.image == nil){
             textView.textColor = UIColor.blackColor()
             placeholderLabel.textColor = UIColor.blackColor()
-            bgView.backgroundColor = UIColor.whiteColor()
+            imageView.backgroundColor = UIColor.whiteColor()
         }else{
             textView.textColor = UIColor.whiteColor()
             placeholderLabel.textColor = UIColor.whiteColor()
-            bgView.backgroundColor = UIColor.blackColor()
+            imageView.backgroundColor = UIColor.blackColor()
         }
         
         picker.dismissViewControllerAnimated(true, completion: nil)
