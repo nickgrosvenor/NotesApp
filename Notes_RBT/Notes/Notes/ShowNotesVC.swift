@@ -369,16 +369,15 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                     bgimage.getDataInBackgroundWithBlock({
                         (imageData: NSData!, error: NSError!) -> Void in
                         if (error == nil && imageData != nil) {
+                            
                             let image = UIImage(data:imageData)
                             cell.bgImage.image = image
-                            cell.bgImage.alpha = 0.75
                             cell.bgImage.contentMode = UIViewContentMode.ScaleAspectFit
-                            
-                            println("BG Image: \(cell.bgImage.image)")
                             
                             self.changeTextColor()
                             
                             if(cell.bgImage.image != nil){
+                                cell.bgImage.alpha = 0.75
                                 self.removeButton.setBackgroundImage(cell.bgImage.image, forState: UIControlState.Normal)
                                  cell.bgView.backgroundColor = UIColor.blackColor()
                             }else{

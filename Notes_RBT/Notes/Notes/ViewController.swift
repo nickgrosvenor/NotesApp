@@ -17,7 +17,8 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var monthSection = [Int]()
     var isLoading = false
     var lastDate = NSDate()
-    var bgImages = ["1BG.png","2BG.png","3BG.png","4BG.png","5BG.png","6BG.png","7BG.png","8BG.png","9BG.png","10BG.png","11BG.png","12BG.png","13BG.png","14BG.png","15BG.png","16BG.png","17BG.png","18BG.png","19BG.png","20BG.png","21BG.png","22BG.png","23BG.png","24BG.png","25BG.png","26BG.png","27BG.png","28BG.png","29BG.png","30BG.png","31BG.png","32BG.png","33BG.png","34BG.png","35BG.png","36BG.png","37BG.png","38BG.png","39BG.png","40BG.png","41BG.png","42BG.png","44BG.png","45BG.png","46BG.png","47BG.png"] //"43BG.png",
+    
+    var bgImages = ["1BG","2BG","3BG","4BG","5BG","6BG","7BG","8BG","9BG","10BG","11BG","12BG"]//,"13BG.png","14BG.png","15BG.png","16BG.png","17BG.png","18BG.png","19BG.png","20BG.png","21BG.png","22BG.png","23BG.png","24BG.png","25BG.png","26BG.png","27BG.png","28BG.png","29BG.png","30BG.png","31BG.png","32BG.png","33BG.png","34BG.png","35BG.png","36BG.png","37BG.png","38BG.png","39BG.png","40BG.png","41BG.png","42BG.png","44BG.png","45BG.png","46BG.png","47BG.png"] //"43BG.png",
     var parseData = [AnyObject]()
     var indexValue = 0;
     var sectionValue = 0;
@@ -36,7 +37,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         super.viewDidLoad()
         
         // get Date Data
-        
         self.navigationItem.title = "Timeline"
         let logo = UIImage(named: "uploadistLogo")
         let imageView = UIImageView(image:logo)
@@ -49,13 +49,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         tableView.delegate = self
         
         getDateData(false)
-        
-        //        var bgImageView = UIImageView()
-        //        for i in 1...bgImages.count {
-        //            var randomIndex = Int(arc4random_uniform(UInt32(bgImages.count)))
-        //            bgImageView.image = UIImage(named: "\(bgImages[randomIndex])")
-        //            self.tableView.backgroundView = bgImageView
-        //        }
     }
     
     
