@@ -54,6 +54,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     override func viewWillAppear(animated: Bool) {
         
+        
         if (PFUser.currentUser() == nil)
         {
             var logInViewController = PFLogInViewController()
@@ -84,6 +85,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         println("Ankti login")
         self.dismissViewControllerAnimated(true, completion: nil)
+        fetchDataFromParse()
     }
     
     func logInViewController(logInController: PFLogInViewController!, didFailToLogInWithError error: NSError!) {
@@ -102,6 +104,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         println("Ankiti login")
         self.dismissViewControllerAnimated(true, completion: nil)
+        fetchDataFromParse()
     }
     
     func signUpViewController(signUpController: PFSignUpViewController!, didFailToSignUpWithError error: NSError!) {

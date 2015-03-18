@@ -287,7 +287,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
  
         imageView.image = bgImage
         imageView.alpha = 0.75
-        imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        imageView.contentMode = UIViewContentMode.ScaleToFill
         imageView.frame = CGRectMake(0, 0, imageView.frame.size.width, imageView.frame.size.height)
         centerImageViewContents()
        

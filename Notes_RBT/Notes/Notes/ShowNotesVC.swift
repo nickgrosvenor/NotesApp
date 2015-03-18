@@ -372,7 +372,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                             
                             let image = UIImage(data:imageData)
                             cell.bgImage.image = image
-                            cell.bgImage.contentMode = UIViewContentMode.ScaleAspectFit
+                            cell.bgImage.contentMode = UIViewContentMode.ScaleToFill
                             
                             self.changeTextColor()
                             
@@ -492,7 +492,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     {
         var bgImage = info[UIImagePickerControllerOriginalImage] as UIImage
         cellImageView.image = bgImage
-        cellImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        cellImageView.contentMode = UIViewContentMode.ScaleToFill
         cellImageView.frame = CGRectMake(0, 0, cellImageView.frame.size.width, cellImageView.frame.size.height)
         
         if(cellImageView.image == nil){
@@ -552,6 +552,12 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             (alert: UIAlertAction!) -> Void in
             println("Cancelled")
         })
+        
+        
+        if let popoverController = optionMenu.popoverPresentationController {
+            popoverController.sourceView = self.removeButton
+            popoverController.sourceRect = self.removeButton.bounds
+        }
         
         optionMenu.addAction(deleteAction)
         optionMenu.addAction(cancelAction)
