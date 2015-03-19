@@ -368,7 +368,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         isDeleted = false
         cell.noteLbl.delegate = self
         cell.noteLbl.userInteractionEnabled = true
-        
         let date = tableData[indexPath.row] as NSDate
         let userCalendar = NSCalendar.currentCalendar()
         var dateComp = userCalendar.components(.CalendarUnitDay | .CalendarUnitWeekday, fromDate: date)
@@ -411,8 +410,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                                 }
                             }
                             else{
-                                cell.bgImage.backgroundColor = UIColor.blackColor()
-                                cell.bgImage.image = self.getRandomImageFromAssets()
+//                                cell.bgImage.backgroundColor = UIColor.blackColor()
+//                                cell.bgImage.image = self.getRandomImageFromAssets()
                             }
                         }
                     })
@@ -420,8 +419,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                     }
                 }
                 else{
-                    cell.bgImage.backgroundColor = UIColor.blackColor()
-                    cell.bgImage.image = getRandomImageFromAssets()
+                    cell.bgImage.backgroundColor = UIColor.whiteColor()
+//                    cell.bgImage.image = getRandomImageFromAssets()
                 }
             }
         }
@@ -432,7 +431,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         }else{
             cell.noteLbl.text = ""
         }
-        
+
         cell.bgImage.image = nil
         
         if cell.noteLbl.text != "" {
@@ -552,7 +551,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func removePhoto(){
-       let actionSheet = UIActionSheet(title:nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: "Remove Photo", otherButtonTitles: "" )
+        
+        let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle:"Cancel", destructiveButtonTitle: "Remove Photo")
         actionSheet.showInView(self.view)
     }
     
