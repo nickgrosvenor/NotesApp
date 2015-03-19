@@ -307,23 +307,40 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             var d2 = dateFormter.stringFromDate(NSDate())
             
             var dateComparisionResult:NSComparisonResult = d2.compare(d1)
+            
             if dateComparisionResult == NSComparisonResult.OrderedSame {
                 
-                
-                let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ShowNoteVC") as ShowNotesVC
-                vc.dateArray = dateArray
-                vc.parseData = parseData
-                vc.section = indexPath.section
-                vc.index = indexPath.row
-                vc.fromAdd = 0
-                self.navigationController?.pushViewController(vc, animated: true)
-                
+                showDetailVC(indexPath.section, row: indexPath.row)
             }
             else if dateComparisionResult == NSComparisonResult.OrderedAscending {
                 
-                let vc = self.storyboard?.instantiateViewControllerWithIdentifier("AddNoteVC") as AddNoteVC
-                vc.currentDate = selectedDate
-                self.navigationController?.pushViewController(vc, animated: true)
+                
+                // Mark check for current Data in parse
+                if(parseData.count>0)
+                {
+                    var isfound = false
+                    for (var i=0;i<parseData.count;i++) {
+                        var dict: (AnyObject) = parseData[i]
+                        if ( dict["Date"] as String == d1 ){
+                            isfound = true
+                            break
+                        }
+                    }
+                    
+                    if !isfound{
+                        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("AddNoteVC") as AddNoteVC
+                        vc.currentDate = selectedDate
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                    else{
+                        showDetailVC(indexPath.section, row: indexPath.row)
+                    }
+                }
+                else{
+                    let vc = self.storyboard?.instantiateViewControllerWithIdentifier("AddNoteVC") as AddNoteVC
+                    vc.currentDate = selectedDate
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
             }
             else if dateComparisionResult == NSComparisonResult.OrderedDescending{
                 
@@ -344,20 +361,31 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                         alert.show()
                     }
                     else{
-                        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ShowNoteVC") as ShowNotesVC
-                        vc.dateArray = dateArray
-                        vc.parseData = parseData
-                        vc.section = indexPath.section
-                        vc.index = indexPath.row
-                        vc.fromAdd = 0
-                        self.navigationController?.pushViewController(vc, animated: true)
+                        showDetailVC(indexPath.section, row: indexPath.row)
                     }
+                }
+                else{
+                    let alert = UIAlertView(title: nil, message: "First enter todays Entry", delegate: nil, cancelButtonTitle: "OK")
+                    alert.show()
                 }
             }
             
         }
         
     } // end of Method
+    
+    
+    func showDetailVC(section:Int,row:Int){
+        
+        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ShowNoteVC") as ShowNotesVC
+        vc.dateArray = dateArray
+        vc.parseData = parseData
+        vc.section = section
+        vc.index = row
+        vc.fromAdd = 0
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+    }
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
