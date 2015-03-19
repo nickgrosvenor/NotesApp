@@ -114,7 +114,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
                 textView.textColor = UIColor.blackColor()
                 placeholderLabel.textColor = UIColor.blackColor()
             }
-                    println("When nil: \(imageView.image)")
+            println("When nil: \(imageView.image)")
         }else{
             if(textView.text == "Write Here ....."){
                 textView.textColor = UIColor.lightGrayColor()
@@ -122,7 +122,6 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
                 textView.textColor = UIColor.whiteColor()
                 placeholderLabel.textColor = UIColor.whiteColor()
             }
-           
             println("With image: \(imageView.image)")
         }
     }
@@ -185,12 +184,12 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     
     
     func saveDataInParse(){
-    
         JHProgressHUD.sharedHUD.showInView(UIApplication.sharedApplication().keyWindow!, withHeader: "Saving", andFooter: "")
         
         var imageFile : PFFile!
         var testObject : PFObject = PFObject(className: "NotesApp")
         testObject["User"] = PFUser.currentUser()
+        
         if(self.textView.text.isEmpty){
             testObject["Note"] = ""
         }else{
@@ -199,17 +198,27 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         testObject["Date"] = dateTitle
         testObject["isDeleted"] = false
         
+        
         if(bgImage != nil){
             var imageData = UIImagePNGRepresentation(bgImage)
-            var imageFile = PFFile(name:"Image.png", data:imageData)
+            imageFile = PFFile(name:"Image.png", data:imageData)
             testObject["ImageFileData"] = imageFile
-            
-            imageFile.saveInBackgroundWithBlock {
-                (success: Bool, error: NSError!) -> Void in
+        }else{
+            bgImage = self.getRandomImageFromAssets()
+            var imageData = UIImagePNGRepresentation(bgImage)
+            imageFile = PFFile(name:"Random Image.png", data:imageData)
+            testObject["ImageFileData"] = imageFile
+        }
+        
+        
+        if(bgImage != nil){
+//            var imageData = UIImagePNGRepresentation(bgImage)
+//            var imageFile = PFFile(name:"Image.png", data:imageData)
+//            testObject["ImageFileData"] = imageFile
+//            
+            imageFile.saveInBackgroundWithBlock {(success: Bool, error: NSError!) -> Void in
                 if (success) {
-                    
-                    testObject.saveInBackgroundWithBlock {
-                        (success: Bool, error: NSError!) -> Void in
+                    testObject.saveInBackgroundWithBlock {(success: Bool, error: NSError!) -> Void in
                         if (success) {
                             JHProgressHUD.sharedHUD.hide()
                             self.navigationController?.popViewControllerAnimated(true)
@@ -227,9 +236,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             }
         }
         else{
-            
-            testObject.saveInBackgroundWithBlock {
-                (success: Bool, error: NSError!) -> Void in
+           testObject.saveInBackgroundWithBlock {(success: Bool, error: NSError!) -> Void in
                 if (success) {
                     JHProgressHUD.sharedHUD.hide()
                     self.navigationController?.popViewControllerAnimated(true)

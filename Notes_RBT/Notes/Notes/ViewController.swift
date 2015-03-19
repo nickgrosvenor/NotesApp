@@ -18,7 +18,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var isLoading = false
     var lastDate = NSDate()
     
-    var bgImages = ["1BG","2BG","3BG","4BG","5BG","6BG","7BG","8BG","9BG","10BG","11BG","12BG"]//,"13BG.png","14BG.png","15BG.png","16BG.png","17BG.png","18BG.png","19BG.png","20BG.png","21BG.png","22BG.png","23BG.png","24BG.png","25BG.png","26BG.png","27BG.png","28BG.png","29BG.png","30BG.png","31BG.png","32BG.png","33BG.png","34BG.png","35BG.png","36BG.png","37BG.png","38BG.png","39BG.png","40BG.png","41BG.png","42BG.png","44BG.png","45BG.png","46BG.png","47BG.png"] //"43BG.png",
+    var bgImages = ["1BG","2BG","3BG","4BG","5BG","6BG","7BG","8BG","9BG","10BG","11BG","12BG","13BG","14BG.png","15BG","16BG","17BG","18BG","19BG","20BG","21BG","22BG","23BG","24BG.png","25BG","26BG","27BG","28BG.png","29BG.png","30BG","31BG","32BG","33BG","34BG","35BG","36BG","37BG","38BG","39BG","40BG","41BG","42BG","44BG","45BG","46BG","47BG","43BG.png"]
     var parseData = [AnyObject]()
     var indexValue = 0;
     var sectionValue = 0;
@@ -26,7 +26,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var nextTimeIndex = 0;
     var nextTimeSection = 0;
     var thresoldHeight =  CGFloat(0)
-     var currentLocation = CGFloat(0)
+    var currentLocation = CGFloat(0)
     let userCalendar = NSCalendar.currentCalendar()
     let dateFormter = NSDateFormatter()
     

@@ -9,7 +9,7 @@
 import UIKit
 
 
-class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
+class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, UIActionSheetDelegate {
 
     // Variables
     var index = 0
@@ -103,10 +103,10 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             }
         }
         
-        
         let indexPath = NSIndexPath(forRow: currentElement, inSection: 0)
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
     }
+    
     
     override func viewDidAppear(animated: Bool) {
         var checkBool = checkDataContains()
@@ -117,9 +117,9 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                 // your function here
                 self.editClicked()
             })
-            
         }
     }
+    
     
     func checkDataContains()->Bool{
         
@@ -181,7 +181,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func editClicked(){
-        
         var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
         var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
         
@@ -210,8 +209,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func updateDataInParse(){
-        
-        
         var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
         var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
         
@@ -344,15 +341,10 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                     let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
                     alert.show()
                 }
-                
-            }
-            
-            
-        }
+             }
+         }
         else{
-            
-            testObject.saveInBackgroundWithBlock {
-                (success: Bool, error: NSError!) -> Void in
+            testObject.saveInBackgroundWithBlock {(success: Bool, error: NSError!) -> Void in
                 if (success) {
                     JHProgressHUD.sharedHUD.hide()
                     self.navigationController?.popViewControllerAnimated(true)
@@ -361,7 +353,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                     let alert = UIAlertView(title: "Error", message:String(format: "%@", error.userInfo!) , delegate: nil, cancelButtonTitle: "Ok")
                     alert.show()
                 }
-                
             }
         }
     }
@@ -373,8 +364,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        
         var cell = tableView.dequeueReusableCellWithIdentifier("ShowDetailsCell") as ShowDetailsCell
         isDeleted = false
         cell.noteLbl.delegate = self
@@ -401,23 +390,24 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                     noteData = dict["Note"] as String
                     
                     if(dict["isDeleted"] as Bool == false){
-                    
                     let bgimage = dict["Image"] as PFFile
-                    bgimage.getDataInBackgroundWithBlock({
-                        (imageData: NSData!, error: NSError!) -> Void in
+                        
+                    bgimage.getDataInBackgroundWithBlock({(imageData: NSData!, error: NSError!) -> Void in
                         if (error == nil && imageData != nil) {
                             
                             let image = UIImage(data:imageData)
                             cell.bgImage.image = image
-                            self.changeTextColor(cell)
+//                            self.changeTextColor(cell)
                             
                             if(cell.bgImage.image != nil){
-                                cell.bgImage.alpha = 0.75
+                                cell.bgImage.alpha = 0.95
                                 self.removeButton.setBackgroundImage(cell.bgImage.image, forState: UIControlState.Normal)
                                 cell.bgImage.backgroundColor = UIColor.blackColor()
+                                cell.noteLbl.textColor = UIColor.whiteColor()
                             }else{
                                 self.removeButton.setBackgroundImage(UIImage(named:"Camera Icon"), forState: UIControlState.Normal)
                                 cell.bgImage.backgroundColor = UIColor.whiteColor()
+                                cell.noteLbl.textColor = UIColor.blackColor()
                             }
                         }
                     })
@@ -444,7 +434,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             tapGestureRecognizer.numberOfTapsRequired = 2
             cell.noteLbl.addGestureRecognizer(tapGestureRecognizer)
         }
-        
         
         self.removeButton.setBackgroundImage(UIImage(named:"Camera Icon"), forState: UIControlState.Normal)
         
@@ -503,7 +492,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     @IBAction func removeButtonPressed(sender: AnyObject) {
-        
         var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
         var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
         
@@ -552,38 +540,36 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func removePhoto(){
-        let optionMenu: UIAlertController = UIAlertController()
-        
-        let deleteAction = UIAlertAction(title: "Remove Photo", style: UIAlertActionStyle.Destructive, handler: {
-            (alert: UIAlertAction!) -> Void in
-            
-            self.isDeleted = true
-            
-            var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
-            var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
-            cell.noteLbl.textColor = UIColor.blackColor()
-            cell.bgImage.image = nil
-            cell.bgImage.backgroundColor = UIColor.whiteColor()
-            
-            self.removeButton.setBackgroundImage(UIImage(named:"Camera Icon"), forState: UIControlState.Normal)
-            self.touchOutsideTextView()
-        })
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
-            (alert: UIAlertAction!) -> Void in
-            println("Cancelled")
-        })
-        
-        
-        if let popoverController = optionMenu.popoverPresentationController {
-            popoverController.sourceView = self.removeButton
-            popoverController.sourceRect = self.removeButton.bounds
+       let actionSheet = UIActionSheet(title:nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: "Remove Photo", otherButtonTitles: "" )
+        actionSheet.showInView(self.view)
+    }
+    
+    
+    func actionSheet(actionSheet: UIActionSheet!, clickedButtonAtIndex buttonIndex: Int)
+    {
+        switch buttonIndex{
+            case 0:
+                removePhotoFromTable()
+                break;
+            default:
+                NSLog("Default");
+                break;
+                //Some code here..
         }
+    }
+    
+    
+    func removePhotoFromTable(){
+        self.isDeleted = true
         
-        optionMenu.addAction(deleteAction)
-        optionMenu.addAction(cancelAction)
+        var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
+        var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
+        cell.noteLbl.textColor = UIColor.blackColor()
+        cell.bgImage.image = nil
+        cell.bgImage.backgroundColor = UIColor.whiteColor()
         
-        self.presentViewController(optionMenu, animated: true, completion: nil)
+        self.removeButton.setBackgroundImage(UIImage(named:"Camera Icon"), forState: UIControlState.Normal)
+        self.touchOutsideTextView()
     }
     
     
@@ -616,8 +602,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
     
-    func changeTextColor(cell:ShowDetailsCell){
-        
+    func changeTextColor(cell: ShowDetailsCell){
         if(cell.bgImage.image == nil){
             if(cell.noteLbl.text == "Write Here ....."){
                 cell.noteLbl.textColor = UIColor.lightGrayColor()
