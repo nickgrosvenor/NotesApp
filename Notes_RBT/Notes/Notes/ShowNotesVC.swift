@@ -368,7 +368,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         isDeleted = false
         cell.noteLbl.delegate = self
         cell.noteLbl.userInteractionEnabled = true
-        
         let date = tableData[indexPath.row] as NSDate
         let userCalendar = NSCalendar.currentCalendar()
         var dateComp = userCalendar.components(.CalendarUnitDay | .CalendarUnitWeekday, fromDate: date)
@@ -432,9 +431,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         }else{
             cell.noteLbl.text = ""
         }
-        
-        cell.bgImage.image = nil
-        
+
         if cell.noteLbl.text != "" {
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "showPopupWithText")
             tapGestureRecognizer.numberOfTapsRequired = 2
