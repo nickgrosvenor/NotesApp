@@ -405,7 +405,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                 if ( dict["Date"] as String == title ){
                     isfound = true
                     noteData = dict["Note"] as String
-                    
+                    self.isDeleted = dict["isDeleted"] as Bool
                     if(dict["isDeleted"] as Bool == false){
                     let bgimage = dict["Image"] as PFFile
                         
