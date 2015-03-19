@@ -410,8 +410,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                                 }
                             }
                             else{
-//                                cell.bgImage.backgroundColor = UIColor.blackColor()
-//                                cell.bgImage.image = self.getRandomImageFromAssets()
+                                cell.bgImage.backgroundColor = UIColor.blackColor()
+                                cell.bgImage.image = self.getRandomImageFromAssets()
                             }
                         }
                     })
