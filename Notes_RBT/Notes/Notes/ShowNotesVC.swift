@@ -549,7 +549,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func removePhoto(){
-       let actionSheet = UIActionSheet(title:nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: "Remove Photo", otherButtonTitles: "" )
+        
+        let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle:"Cancel", destructiveButtonTitle: "Remove Photo")
         actionSheet.showInView(self.view)
     }
     
