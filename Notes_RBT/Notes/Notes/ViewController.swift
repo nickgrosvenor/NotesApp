@@ -333,7 +333,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     var isfound = false
                     for (var i=0;i<parseData.count;i++) {
                         var dict: (AnyObject) = parseData[i]
-                        if ( dict["Date"] as String == d1 ){
+                        if ( dict["Date"] as String == d2 ){
                            isfound = true
                             break
                         }
