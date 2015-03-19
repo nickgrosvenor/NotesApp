@@ -410,8 +410,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                                 }
                             }
                             else{
-                                cell.bgImage.backgroundColor = UIColor.blackColor()
-                                cell.bgImage.image = self.getRandomImageFromAssets()
+//                                cell.bgImage.backgroundColor = UIColor.blackColor()
+//                                cell.bgImage.image = self.getRandomImageFromAssets()
                             }
                         }
                     })
@@ -419,8 +419,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                     }
                 }
                 else{
-                    cell.bgImage.backgroundColor = UIColor.blackColor()
-                    cell.bgImage.image = getRandomImageFromAssets()
+                    cell.bgImage.backgroundColor = UIColor.whiteColor()
+//                    cell.bgImage.image = getRandomImageFromAssets()
                 }
             }
         }
@@ -432,6 +432,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             cell.noteLbl.text = ""
         }
 
+        cell.bgImage.image = nil
+        
         if cell.noteLbl.text != "" {
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "showPopupWithText")
             tapGestureRecognizer.numberOfTapsRequired = 2
