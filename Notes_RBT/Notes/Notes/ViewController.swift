@@ -305,6 +305,11 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             vc.fromAdd = 0
             self.navigationController?.pushViewController(vc, animated: true)
         }
+        
+        
+      
+
+        
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

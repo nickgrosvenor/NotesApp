@@ -26,7 +26,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     var tableData = [NSDate]()
     let dateFormter = NSDateFormatter()
     var rightbarBtn = UIBarButtonItem()
-    
+     var randomBGImages = ["1BG","2BG","3BG","4BG","5BG","6BG","7BG","8BG","9BG","10BG","11BG","12BG","13BG","14BG.png","15BG","16BG","17BG","18BG","19BG","20BG","21BG","22BG","23BG","24BG.png","25BG","26BG","27BG","28BG.png","29BG.png","30BG","31BG","32BG","33BG","34BG","35BG","36BG","37BG","38BG","39BG","40BG","41BG","42BG","44BG","45BG","46BG","47BG","43BG.png"]
     
     
     
@@ -393,21 +393,26 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                     let bgimage = dict["Image"] as PFFile
                         
                     bgimage.getDataInBackgroundWithBlock({(imageData: NSData!, error: NSError!) -> Void in
-                        if (error == nil && imageData != nil) {
-                            
-                            let image = UIImage(data:imageData)
-                            cell.bgImage.image = image
-//                            self.changeTextColor(cell)
-                            
-                            if(cell.bgImage.image != nil){
-                                cell.bgImage.alpha = 0.95
-                                self.removeButton.setBackgroundImage(cell.bgImage.image, forState: UIControlState.Normal)
+                        if (error == nil) {
+                            if(imageData != nil){
+                                let image = UIImage(data:imageData)
+                                cell.bgImage.image = image
+                                self.changeTextColor(cell)
+                                
+                                if(cell.bgImage.image != nil){
+                                    cell.bgImage.alpha = 0.95
+                                    self.removeButton.setBackgroundImage(cell.bgImage.image, forState: UIControlState.Normal)
+                                    cell.bgImage.backgroundColor = UIColor.blackColor()
+                                    cell.noteLbl.textColor = UIColor.whiteColor()
+                                }else{
+                                    self.removeButton.setBackgroundImage(UIImage(named:"Camera Icon"), forState: UIControlState.Normal)
+                                    cell.bgImage.backgroundColor = UIColor.whiteColor()
+                                    cell.noteLbl.textColor = UIColor.blackColor()
+                                }
+                            }
+                            else{
                                 cell.bgImage.backgroundColor = UIColor.blackColor()
-                                cell.noteLbl.textColor = UIColor.whiteColor()
-                            }else{
-                                self.removeButton.setBackgroundImage(UIImage(named:"Camera Icon"), forState: UIControlState.Normal)
-                                cell.bgImage.backgroundColor = UIColor.whiteColor()
-                                cell.noteLbl.textColor = UIColor.blackColor()
+                                cell.bgImage.image = self.getRandomImageFromAssets()
                             }
                         }
                     })
@@ -415,7 +420,8 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                     }
                 }
                 else{
-                    cell.bgImage.backgroundColor = UIColor.whiteColor()
+                    cell.bgImage.backgroundColor = UIColor.blackColor()
+                    cell.bgImage.image = getRandomImageFromAssets()
                 }
             }
         }
@@ -443,6 +449,12 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         return cell
     }
     
+    
+    func getRandomImageFromAssets() -> UIImage{
+        var randomIndex = Int(arc4random_uniform(UInt32(randomBGImages.count)))
+        var noteImage = UIImage(named: "\(randomBGImages[randomIndex])")
+        return noteImage!
+    }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableData.count

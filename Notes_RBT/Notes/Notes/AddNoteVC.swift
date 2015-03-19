@@ -27,7 +27,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     var bgImage: UIImage!
     var rightbarBtn = UIBarButtonItem()
     var placeholderArray : [String] = ["What’d you do?","What upset you?","Learn anything?","Buy anything?","Go anywhere?","Looking forward to anything?","Talk to anyone different?","New ideas?","Tell me about this fine day?"]
-     var bgImages = ["1BG.png","2BG.png","3BG.png","4BG.png","5BG.png","6BG.png","7BG.png","8BG.png","9BG.png","10BG.png","11BG.png","12BG.png","13BG.png","14BG.png","15BG.png","16BG.png","17BG.png","18BG.png","19BG.png","20BG.png","21BG.png","22BG.png","23BG.png","24BG.png","25BG.png","26BG.png","27BG.png","28BG.png","29BG.png","30BG.png","31BG.png","32BG.png","33BG.png","34BG.png","35BG.png","36BG.png","37BG.png","38BG.png","39BG.png","40BG.png","41BG.png","42BG.png","44BG.png","45BG.png","46BG.png","47BG.png"] //"43BG.png",
+    
     
     @IBOutlet weak var backViewOfTV: UIView!
     @IBOutlet weak var textView: UITextView!
@@ -150,11 +150,6 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
                         var imageData = UIImagePNGRepresentation(self.bgImage)
                         var imageFile = PFFile(name:"Image.png", data:imageData)
                         obj["ImageFileData"] = imageFile
-                    }else{
-                        self.bgImage = self.getRandomImageFromAssets()
-                        var imageData = UIImagePNGRepresentation(self.bgImage)
-                        var imageFile = PFFile(name:"Random Image.png", data:imageData)
-                        obj["ImageFileData"] = imageFile
                     }
                     
                     obj.saveInBackgroundWithBlock {
@@ -197,25 +192,14 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         }
         testObject["Date"] = dateTitle
         testObject["isDeleted"] = false
-        
-        
-        if(bgImage != nil){
-            var imageData = UIImagePNGRepresentation(bgImage)
-            imageFile = PFFile(name:"Image.png", data:imageData)
-            testObject["ImageFileData"] = imageFile
-        }else{
-            bgImage = self.getRandomImageFromAssets()
-            var imageData = UIImagePNGRepresentation(bgImage)
-            imageFile = PFFile(name:"Random Image.png", data:imageData)
-            testObject["ImageFileData"] = imageFile
-        }
-        
+       
         
         if(bgImage != nil){
-//            var imageData = UIImagePNGRepresentation(bgImage)
-//            var imageFile = PFFile(name:"Image.png", data:imageData)
-//            testObject["ImageFileData"] = imageFile
-//            
+            
+            var imageData = UIImagePNGRepresentation(bgImage)
+            var imageFile = PFFile(name:"Image.png", data:imageData)
+            testObject["ImageFileData"] = imageFile
+            
             imageFile.saveInBackgroundWithBlock {(success: Bool, error: NSError!) -> Void in
                 if (success) {
                     testObject.saveInBackgroundWithBlock {(success: Bool, error: NSError!) -> Void in
@@ -250,13 +234,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         }
     }
     
- 
-    func getRandomImageFromAssets() -> UIImage{
-        var randomIndex = Int(arc4random_uniform(UInt32(bgImages.count)))
-        var noteImage = UIImage(named: "\(bgImages[randomIndex])")
-        return noteImage!
-     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
