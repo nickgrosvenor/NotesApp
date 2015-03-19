@@ -29,10 +29,10 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     var randomBGImages = ["1BG","2BG","3BG","4BG","5BG","6BG","7BG","8BG","9BG","10BG","11BG","12BG","13BG","14BG.png","15BG","16BG","17BG","18BG","19BG","20BG","21BG","22BG","23BG","24BG.png","25BG","26BG","27BG","28BG.png","29BG.png","30BG","31BG","32BG","33BG","34BG","35BG","36BG","37BG","38BG","39BG","40BG","41BG","42BG","44BG","45BG","46BG","47BG","43BG.png"]
     
     
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var removeButton: UIButton!
     @IBOutlet var shareButton: UIButton!
+    
     
     
     override func viewDidLoad() {
@@ -48,6 +48,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         
         // Move view when keyboard appears
         registerNotificationOfKeyboard()
+        
         
         // Dismiss Keyboard
         let aSelector : Selector = "touchOutsideTextView"
@@ -68,6 +69,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         
         rightbarBtn = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: "editClicked")
         navigationItem.rightBarButtonItems = [rightbarBtn]
+        
         
         //calculating the index to Open Current Row
         for(var i=0;i<=section;i++){
@@ -152,8 +154,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         return false
     }
     
-    
-    
+   
     func touchOutsideTextView(){
         self.view.endEditing(true)
     }
@@ -199,15 +200,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool{
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false
-        }
-        return true
-    }
-    
-    
     func updateDataInParse(){
         var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
         var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
@@ -236,7 +228,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                             obj["Note"] = cell.noteLbl.text
                         }
                     }
-                    
                     
                     if(cell.bgImage.image != nil){
                         var imageData = UIImagePNGRepresentation(cell.bgImage.image)
@@ -294,8 +285,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func saveDataInParse(){
-        
-        
+       
         var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
         var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
         
@@ -396,7 +386,9 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                             if(imageData != nil){
                                 let image = UIImage(data:imageData)
                                 cell.bgImage.image = image
+                                
                                 self.changeTextColor(cell)
+                                self.autoResizeText(cell)
                                 
                                 if(cell.bgImage.image != nil){
                                     cell.bgImage.alpha = 0.95
@@ -412,6 +404,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                             else{
                                 cell.bgImage.backgroundColor = UIColor.blackColor()
                                 cell.bgImage.image = self.getRandomImageFromAssets()
+                                cell.noteLbl.textColor = UIColor.whiteColor()
                             }
                         }
                     })
@@ -420,7 +413,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                 }
                 else{
                     cell.bgImage.backgroundColor = UIColor.whiteColor()
-//                    cell.bgImage.image = getRandomImageFromAssets()
                 }
             }
         }
@@ -443,9 +435,34 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         self.removeButton.setBackgroundImage(UIImage(named:"Camera Icon"), forState: UIControlState.Normal)
         
         autoResizeText(cell)
-        changeTextColor(cell)
+//        changeTextColor(cell)
         
         return cell
+    }
+    
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool{
+        var cell = tableView.dequeueReusableCellWithIdentifier("ShowDetailsCell") as ShowDetailsCell
+        autoResizeText(cell)
+        
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+    
+    
+    func autoResizeText(cell:ShowDetailsCell){
+        cell.noteLbl.textAlignment = NSTextAlignment.Center
+        var textLength = countElements(cell.noteLbl.text)
+        println("Length: \(textLength)")
+        
+        if textLength > 35 {
+            cell.noteLbl.font = UIFont.boldSystemFontOfSize(20)
+        }else{
+            cell.noteLbl.font = UIFont.boldSystemFontOfSize(30)
+        }
     }
     
     
@@ -454,6 +471,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         var noteImage = UIImage(named: "\(randomBGImages[randomIndex])")
         return noteImage!
     }
+    
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableData.count
@@ -551,7 +569,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func removePhoto(){
-        
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle:"Cancel", destructiveButtonTitle: "Remove Photo")
         actionSheet.showInView(self.view)
     }
@@ -630,22 +647,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             }
         }
     }
-    
-    
-    func autoResizeText(cell:ShowDetailsCell){
-
-        cell.noteLbl.textAlignment = NSTextAlignment.Center
-        
-        var textLength = countElements(cell.noteLbl.text)
-        
-        if textLength > 35 {
-            cell.noteLbl.font = UIFont.boldSystemFontOfSize(20)
-        }else{
-            cell.noteLbl.font = UIFont.boldSystemFontOfSize(30)
-        }
-        
-    }
-    
+   
     
     func registerNotificationOfKeyboard(){
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil)
