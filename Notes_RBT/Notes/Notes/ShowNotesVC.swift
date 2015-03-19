@@ -165,10 +165,15 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
         var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
         
-        var popUpView = UIView(frame: CGRectMake(UIScreen.mainScreen().bounds.width/2-150, UIScreen.mainScreen().bounds.height/2-125, 300, 250))
+        tableView.scrollEnabled = false
+        
+        var height =  self.navigationController?.navigationBar.frame.size.height
+        
+        let popUpView = UIView(frame: CGRectMake(30, height! + 50, UIScreen.mainScreen().bounds.width - 60, UIScreen.mainScreen().bounds.height - height! - 80))
+        popUpView.tag = 1000
         popUpView.backgroundColor = UIColor.whiteColor()
         
-        var noteText = UITextView(frame: CGRectMake(popUpView.frame.width/2-90, popUpView.frame.height/2-110, 180, 380))
+        var noteText = UITextView(frame: CGRectMake(0, 50, CGRectGetWidth(popUpView.frame), CGRectGetHeight(popUpView.frame)))
         noteText.text = cell.noteLbl.text
         noteText.textColor = UIColor.blackColor()
         noteText.textAlignment = NSTextAlignment.Center
@@ -176,8 +181,21 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         noteText.scrollEnabled = true
         noteText.font = UIFont(name: "HelveticaNeue-Light", size: 19)
         
+        let closeButton   = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        closeButton.frame = CGRectMake(UIScreen.mainScreen().bounds.width - 160, 0, 100, 50)
+        closeButton.setTitle("Close Button", forState: UIControlState.Normal)
+        closeButton.addTarget(self, action: "closeButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        
         popUpView.addSubview(noteText)
+        popUpView.addSubview(closeButton)
         self.view.addSubview(popUpView)
+    }
+    
+    func closeButtonAction(sender:UIButton!)
+    {
+        var view  = self.view.viewWithTag(1000)
+        view?.removeFromSuperview()
+        tableView.scrollEnabled = true
     }
     
     
@@ -377,7 +395,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                 if ( dict["Date"] as String == title ){
                     isfound = true
                     noteData = dict["Note"] as String
-                    
+                    self.isDeleted = dict["isDeleted"] as Bool
                     if(dict["isDeleted"] as Bool == false){
                     let bgimage = dict["Image"] as PFFile
                         
