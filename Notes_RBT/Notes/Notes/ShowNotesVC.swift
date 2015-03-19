@@ -484,6 +484,18 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
     
+    func textViewDidChange(textView: UITextView) {
+        var textLength = countElements(textView.text)
+        println("Length: \(textLength)")
+
+        if textLength > 35 {
+            textView.font = UIFont.boldSystemFontOfSize(20)
+        }else{
+            textView.font = UIFont.boldSystemFontOfSize(30)
+        }
+    }
+    
+    
     func getRandomImageFromAssets() -> UIImage{
         var randomIndex = Int(arc4random_uniform(UInt32(randomBGImages.count)))
         var noteImage = UIImage(named: "\(randomBGImages[randomIndex])")
