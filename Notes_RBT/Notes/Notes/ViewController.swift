@@ -297,16 +297,67 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             
         }
         else{
-            let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ShowNoteVC") as ShowNotesVC
-            vc.dateArray = dateArray
-            vc.parseData = parseData
-            vc.section = indexPath.section
-            vc.index = indexPath.row
-            vc.fromAdd = 0
-            self.navigationController?.pushViewController(vc, animated: true)
+            
+            let tempArr = dateArray[indexPath.section] as NSArray
+            let selectedDate = tempArr[indexPath.row] as NSDate
+            
+            let dateFormter = NSDateFormatter()
+            dateFormter.dateFormat = "MMM dd, yyyy"
+            var d1 = dateFormter.stringFromDate(selectedDate)
+            var d2 = dateFormter.stringFromDate(NSDate())
+            
+            var dateComparisionResult:NSComparisonResult = d2.compare(d1)
+            if dateComparisionResult == NSComparisonResult.OrderedSame {
+                
+                
+                let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ShowNoteVC") as ShowNotesVC
+                vc.dateArray = dateArray
+                vc.parseData = parseData
+                vc.section = indexPath.section
+                vc.index = indexPath.row
+                vc.fromAdd = 0
+                self.navigationController?.pushViewController(vc, animated: true)
+                
+            }
+            else if dateComparisionResult == NSComparisonResult.OrderedAscending {
+                
+                let vc = self.storyboard?.instantiateViewControllerWithIdentifier("AddNoteVC") as AddNoteVC
+                vc.currentDate = selectedDate
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            else if dateComparisionResult == NSComparisonResult.OrderedDescending{
+                
+                // Mark check for current Data in parse
+                if(parseData.count>0)
+                {
+                    var isfound = false
+                    for (var i=0;i<parseData.count;i++) {
+                        var dict: (AnyObject) = parseData[i]
+                        if ( dict["Date"] as String == d1 ){
+                           isfound = true
+                            break
+                        }
+                    }
+                    
+                    if !isfound{
+                        let alert = UIAlertView(title: nil, message: "First enter todays Entry", delegate: nil, cancelButtonTitle: "OK")
+                        alert.show()
+                    }
+                    else{
+                        let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ShowNoteVC") as ShowNotesVC
+                        vc.dateArray = dateArray
+                        vc.parseData = parseData
+                        vc.section = indexPath.section
+                        vc.index = indexPath.row
+                        vc.fromAdd = 0
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                }
+            }
+            
         }
-
-    }
+        
+    } // end of Method
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -469,6 +520,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         else{
             let vc = self.storyboard?.instantiateViewControllerWithIdentifier("AddNoteVC") as AddNoteVC
             self.navigationController?.pushViewController(vc, animated: true)
+            vc.currentDate = NSDate()
         }
     }
     

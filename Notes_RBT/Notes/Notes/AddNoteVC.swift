@@ -23,6 +23,7 @@ extension Array {
 
 class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
     
+    var currentDate = NSDate()
     var dateTitle: String = ""
     var bgImage: UIImage!
     var rightbarBtn = UIBarButtonItem()
@@ -65,10 +66,10 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         // Changing textview text color
         changeTextColor()
         
-        var date = NSDate()
+//        var date = NSDate()
         let dateFormter = NSDateFormatter()
         dateFormter.dateFormat = "MMM dd, yyyy"
-        dateTitle = dateFormter.stringFromDate(date as NSDate)
+        dateTitle = dateFormter.stringFromDate(currentDate as NSDate)
         self.navigationItem.title = dateTitle
         
         
