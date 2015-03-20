@@ -23,6 +23,9 @@
 		77A8E3691AB4265A00BC058A /* ParseCrashReporting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77A8E3641AB4265A00BC058A /* ParseCrashReporting.framework */; };
 		77A8E36A1AB4265A00BC058A /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77A8E3651AB4265A00BC058A /* ParseFacebookUtils.framework */; };
 		77A8E36B1AB4265A00BC058A /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77A8E3661AB4265A00BC058A /* ParseUI.framework */; };
+		7D4289861ABBF32600D770C9 /* ReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4289851ABBF32600D770C9 /* ReminderVC.swift */; };
+		7D4289881ABBF36F00D770C9 /* ReminderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4289871ABBF36F00D770C9 /* ReminderCell.swift */; };
+		7D42898A1ABBF69400D770C9 /* SetReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4289891ABBF69400D770C9 /* SetReminderVC.swift */; };
 		8053DAE81AB41361001A3ED4 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8053DADC1AB41361001A3ED4 /* Accounts.framework */; };
 		8053DAE91AB41361001A3ED4 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8053DADD1AB41361001A3ED4 /* AudioToolbox.framework */; };
 		8053DAEA1AB41361001A3ED4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8053DADE1AB41361001A3ED4 /* CFNetwork.framework */; };
@@ -71,6 +74,9 @@
 		77A8E3641AB4265A00BC058A /* ParseCrashReporting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseCrashReporting.framework; path = "parse-library-1.6.1/ParseCrashReporting.framework"; sourceTree = "<group>"; };
 		77A8E3651AB4265A00BC058A /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtils.framework; path = "parse-library-1.6.1/ParseFacebookUtils.framework"; sourceTree = "<group>"; };
 		77A8E3661AB4265A00BC058A /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = "parse-library-1.6.1/ParseUI.framework"; sourceTree = "<group>"; };
+		7D4289851ABBF32600D770C9 /* ReminderVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReminderVC.swift; sourceTree = "<group>"; };
+		7D4289871ABBF36F00D770C9 /* ReminderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReminderCell.swift; sourceTree = "<group>"; };
+		7D4289891ABBF69400D770C9 /* SetReminderVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetReminderVC.swift; sourceTree = "<group>"; };
 		8053DADC1AB41361001A3ED4 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		8053DADD1AB41361001A3ED4 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8053DADE1AB41361001A3ED4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -149,6 +155,8 @@
 			children = (
 				77A8E3611AB409F400BC058A /* View */,
 				77A8E3591AB409F000BC058A /* OptionVC.swift */,
+				7D4289851ABBF32600D770C9 /* ReminderVC.swift */,
+				7D4289891ABBF69400D770C9 /* SetReminderVC.swift */,
 				77A8E3391AB4075600BC058A /* ViewController.swift */,
 				77A8E3581AB409F000BC058A /* AddNoteVC.swift */,
 				77A8E3571AB409F000BC058A /* ShowNotesVC.swift */,
@@ -194,6 +202,7 @@
 				8053DB011AB41416001A3ED4 /* Notes-Bridging-Header.h */,
 				77A8E35A1AB409F000BC058A /* ShowDetailsCell.swift */,
 				77A8E35B1AB409F000BC058A /* TableViewCell.swift */,
+				7D4289871ABBF36F00D770C9 /* ReminderCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -324,13 +333,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				77A8E33A1AB4075600BC058A /* ViewController.swift in Sources */,
+				7D42898A1ABBF69400D770C9 /* SetReminderVC.swift in Sources */,
 				77A8E35F1AB409F000BC058A /* ShowDetailsCell.swift in Sources */,
 				B27287471AB76E740025F3A0 /* ImageCell.swift in Sources */,
+				7D4289881ABBF36F00D770C9 /* ReminderCell.swift in Sources */,
 				77A8E35C1AB409F000BC058A /* ShowNotesVC.swift in Sources */,
 				77A8E35E1AB409F000BC058A /* OptionVC.swift in Sources */,
 				77A8E35D1AB409F000BC058A /* AddNoteVC.swift in Sources */,
 				77A8E3601AB409F000BC058A /* TableViewCell.swift in Sources */,
 				8053DB051AB414AF001A3ED4 /* JHProgressHUD.swift in Sources */,
+				7D4289861ABBF32600D770C9 /* ReminderVC.swift in Sources */,
 				77A8E3381AB4075600BC058A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

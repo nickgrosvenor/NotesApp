@@ -20,6 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.enableLocalDatastore()
         Parse.setApplicationId("SYM0gGF7kIc21e3Mfw7eq8ki9jK6g4gSgGVmwNI7", clientKey: "N0GQH03UljJUIaTQs5Tk4907sFCjc1R0eZbTiaDa")
         
+        if(UIApplication.instancesRespondToSelector(Selector("registerUserNotificationSettings:"))) {
+            UIApplication.sharedApplication().registerUserNotificationSettings(UIUserNotificationSettings(forTypes: .Alert | .Badge, categories: nil))
+        }
+        
         return true
     }
 

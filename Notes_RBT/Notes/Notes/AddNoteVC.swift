@@ -40,7 +40,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+      
         if(crossButton != nil) {
             crossButton.hidden = true
         }
@@ -66,11 +66,9 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         // Changing textview text color
         changeTextColor()
         
-//        var date = NSDate()
         let dateFormter = NSDateFormatter()
         dateFormter.dateFormat = "MMM dd, yyyy"
         dateTitle = dateFormter.stringFromDate(currentDate as NSDate)
-        self.navigationItem.title = dateTitle
         
         
         // Placeholder text
@@ -81,6 +79,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             placeholderLabel.userInteractionEnabled = true
             placeholderLabel.numberOfLines = 0
             placeholderLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+            placeholderLabel.textColor = UIColor.grayColor()
        //     placeholderLabel.font = UIFont(name: "HelveticaNeue-Light", size: 9)
             placeholderLabel.sizeToFit()
         
@@ -91,7 +90,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             }
         }
         
-       rightbarBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "saveDataInParse")
+        rightbarBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "saveDataInParse")
         navigationItem.rightBarButtonItems = [rightbarBtn]
         
         // Dismiss Keyboard
@@ -99,6 +98,8 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
         tapGesture.numberOfTapsRequired = 1
         view.addGestureRecognizer(tapGesture)
+        
+       
     }
     
     
@@ -109,20 +110,12 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     
     func changeTextColor(){
         if(imageView.image == nil){
-            if(textView.text == "Write Here ....."){
-                textView.textColor = UIColor.lightGrayColor()
-            }else{
-                textView.textColor = UIColor.blackColor()
-                placeholderLabel.textColor = UIColor.blackColor()
-            }
+            textView.textColor = UIColor.blackColor()
+            placeholderLabel.textColor = UIColor.blackColor()
             println("When nil: \(imageView.image)")
         }else{
-            if(textView.text == "Write Here ....."){
-                textView.textColor = UIColor.lightGrayColor()
-            }else{
-                textView.textColor = UIColor.whiteColor()
-                placeholderLabel.textColor = UIColor.whiteColor()
-            }
+            textView.textColor = UIColor.whiteColor()
+            placeholderLabel.textColor = UIColor.whiteColor()
             println("With image: \(imageView.image)")
         }
     }
@@ -233,12 +226,11 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             }
             
         }
-    }
+    } // End of method
     
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     
@@ -256,8 +248,7 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     @IBAction func cameraButtonPressed(sender: AnyObject) {
         loadImage()
     }
-    
-
+ 
     
     internal func loadImage(){
         var imagePicker = UIImagePickerController()
@@ -314,22 +305,16 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     
     
     func textViewDidBeginEditing(te: UITextView) {
-        if textView.text == "Write Here ....." {
-            textView.text = nil
-            if(imageView.image == nil){
-                textView.textColor = UIColor.blackColor()
-            }else{
-                textView.textColor = UIColor.whiteColor()
-            }
-        }
+          if(imageView.image == nil){
+              textView.textColor = UIColor.blackColor()
+          }else{
+              textView.textColor = UIColor.whiteColor()
+          }
     }
     
     
     func textViewDidEndEditing(textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.text = "Write Here ....."
-            textView.textColor = UIColor.lightGrayColor()
-        }
+
     }
   
     
@@ -354,40 +339,8 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         }
         
     }
-    
-    
-    
-    
-    /*    @IBAction func doneButtonPressed(sender: UIBarButtonItem){
-    // TODO : Place a Progress Hud here
-    
-    JHProgressHUD.sharedHUD.showInView(self.view, withHeader: "Loading", andFooter: "Please Wait")
-    //       JHProgressHUD.sharedHUD.showInView(self.view)
-    
-    var imageFile : PFFile!
-    var testObject : PFObject = PFObject(className: "NotesApp")
-    testObject["User"] = PFUser.currentUser()
-    testObject["Note"] = textView.text
-    testObject["Date"] = dateTitle
-    
-    if(bgImage != nil){
-    var imageData = UIImagePNGRepresentation(bgImage)
-    var imageFile = PFFile(name:"Image.png", data:imageData)
-    testObject["ImageFileData"] = imageFile
-    }
-    
-    testObject.saveInBackgroundWithBlock {
-    (success: Bool, error: NSError!) -> Void in
-    if (success) {
-    println("Success")
-    self.navigationController?.popViewControllerAnimated(true)
-    } else {
-    println(error.userInfo)
-    self.navigationController?.popViewControllerAnimated(true)
-    }
-    }
-    }
-    */
+   
+   
     
     
 }

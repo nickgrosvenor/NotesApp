@@ -37,7 +37,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+       
         shareButton.hidden = false
         removeButton.hidden = true
         
@@ -191,6 +191,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         self.view.addSubview(popUpView)
     }
     
+        
     func closeButtonAction(sender:UIButton!)
     {
         var view  = self.view.viewWithTag(1000)
@@ -239,12 +240,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                         obj["Note"] = ""
                     }
                     else{
-                        if(cell.noteLbl.text == "Write Here ....."){
-                            obj["Note"] = ""
-                        }
-                        else{
-                            obj["Note"] = cell.noteLbl.text
-                        }
+                        obj["Note"] = cell.noteLbl.text
                     }
                     
                     if(cell.bgImage.image != nil){
@@ -313,7 +309,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         if(cell.noteLbl.text.isEmpty){
             testObject["Note"] = ""
         }else{
-            if(cell.noteLbl.text == "Write Here ....."){
+            if(cell.noteLbl.text == ""){
                 testObject["Note"] = ""
             }
             else{
@@ -520,13 +516,13 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     @IBAction func shareButtonPressed(sender: AnyObject){
-        
         var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
         var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
         
         var noteText = cell.noteLbl.text
         let myWebsite = NSURL(string: "http.//www.google.com")!
-        var objectToShare = [noteText, myWebsite]
+        var userAddedImage = cell.bgImage.image!
+        var objectToShare = [noteText, userAddedImage]
         
         let activityVC: UIActivityViewController = UIActivityViewController(activityItems: objectToShare, applicationActivities: nil)
         
@@ -641,14 +637,12 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func keyboardWillShow(sender: NSNotification) {
-        
-        self.removeButton.frame.origin.y -= 255
+       self.removeButton.frame.origin.y -= 255
         tableView.scrollEnabled = false
     }
     
     
     func keyboardWillHide(sender: NSNotification) {
-        
         self.removeButton.frame.origin.y += 255
         tableView.scrollEnabled = true
     
@@ -663,18 +657,9 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     func changeTextColor(cell: ShowDetailsCell){
         if(cell.bgImage.image == nil){
-            if(cell.noteLbl.text == "Write Here ....."){
-                cell.noteLbl.textColor = UIColor.lightGrayColor()
-            }else{
-                cell.noteLbl.textColor = UIColor.blackColor()
-            }
+            cell.noteLbl.textColor = UIColor.blackColor()
         }else{
-            if(cell.noteLbl.text == "Write Here ....."){
-                cell.noteLbl.textColor = UIColor.lightGrayColor()
-            }
-            else{
-                cell.noteLbl.textColor = UIColor.whiteColor()
-            }
+            cell.noteLbl.textColor = UIColor.whiteColor()
         }
     }
    
