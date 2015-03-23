@@ -28,9 +28,10 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     var bgImage: UIImage!
     var rightbarBtn = UIBarButtonItem()
     var placeholderArray : [String] = ["What’d you do?","What upset you?","Learn anything?","Buy anything?","Go anywhere?","Looking forward to anything?","Talk to anyone different?","New ideas?","Tell me about this fine day?"]
+    var randomBGImages = ["1BG","2BG","3BG","4BG","5BG","6BG","7BG","8BG","9BG","10BG","11BG","12BG","13BG","14BG.png","15BG","16BG","17BG","18BG","19BG","20BG","21BG","22BG","23BG","24BG.png","25BG","26BG","27BG","28BG.png","29BG.png","30BG","31BG","32BG","33BG","34BG","35BG","36BG","37BG","38BG","39BG","40BG","41BG","42BG","44BG","45BG","46BG","47BG","43BG.png"]
     
     
-    @IBOutlet weak var backViewOfTV: UIView!
+//    @IBOutlet weak var backViewOfTV: UIView!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var crossButton: UIButton!
     @IBOutlet var cameraButton: UIButton!
@@ -80,7 +81,6 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             placeholderLabel.numberOfLines = 0
             placeholderLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
             placeholderLabel.textColor = UIColor.grayColor()
-       //     placeholderLabel.font = UIFont(name: "HelveticaNeue-Light", size: 9)
             placeholderLabel.sizeToFit()
         
             if(placeholderLabel.hidden == false){
@@ -99,25 +99,8 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         tapGesture.numberOfTapsRequired = 1
         view.addGestureRecognizer(tapGesture)
         
-       
-    }
-    
-    
-    func touchOutsideTextView(){
-        self.view.endEditing(true)
-    }
-
-    
-    func changeTextColor(){
-        if(imageView.image == nil){
-            textView.textColor = UIColor.blackColor()
-            placeholderLabel.textColor = UIColor.blackColor()
-            println("When nil: \(imageView.image)")
-        }else{
-            textView.textColor = UIColor.whiteColor()
-            placeholderLabel.textColor = UIColor.whiteColor()
-            println("With image: \(imageView.image)")
-        }
+        // Move view when keyboard appears
+        registerNotificationOfKeyboard()
     }
     
     
@@ -187,12 +170,21 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         testObject["Date"] = dateTitle
         testObject["isDeleted"] = false
        
+        if(bgImage != nil){
+            var imageData = UIImagePNGRepresentation(bgImage)
+            imageFile = PFFile(name:"Image.png", data:imageData)
+            testObject["ImageFileData"] = imageFile
+        }else{
+            bgImage = getRandomImageFromAssets()
+            var imageData = UIImagePNGRepresentation(bgImage)
+            imageFile = PFFile(name:"Random Image.png", data:imageData)
+            testObject["ImageFileData"] = imageFile
+        }
         
         if(bgImage != nil){
-            
-            var imageData = UIImagePNGRepresentation(bgImage)
-            var imageFile = PFFile(name:"Image.png", data:imageData)
-            testObject["ImageFileData"] = imageFile
+//            var imageData = UIImagePNGRepresentation(bgImage)
+//            var imageFile = PFFile(name:"Image.png", data:imageData)
+//            testObject["ImageFileData"] = imageFile
             
             imageFile.saveInBackgroundWithBlock {(success: Bool, error: NSError!) -> Void in
                 if (success) {
@@ -227,6 +219,13 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
             
         }
     } // End of method
+    
+    
+    func getRandomImageFromAssets() -> UIImage{
+        var randomIndex = Int(arc4random_uniform(UInt32(randomBGImages.count)))
+        var noteImage = UIImage(named: "\(randomBGImages[randomIndex])")
+        return noteImage!
+    }
     
 
     override func didReceiveMemoryWarning() {
@@ -263,8 +262,8 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         bgImage = info[UIImagePickerControllerOriginalImage] as UIImage
  
         imageView.image = bgImage
-        imageView.alpha = 0.75
-        imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        imageView.alpha = 0.9
+        imageView.contentMode = UIViewContentMode.ScaleAspectFill
         imageView.frame = CGRectMake(0, 0, imageView.frame.size.width, imageView.frame.size.height)
         centerImageViewContents()
        
@@ -341,6 +340,55 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     }
    
    
+    func touchOutsideTextView(){
+        self.view.endEditing(true)
+    }
     
+    
+    func changeTextColor(){
+        if(imageView.image == nil){
+            textView.textColor = UIColor.blackColor()
+            placeholderLabel.textColor = UIColor.blackColor()
+            println("When nil: \(imageView.image)")
+        }else{
+            textView.textColor = UIColor.whiteColor()
+            placeholderLabel.textColor = UIColor.whiteColor()
+            println("With image: \(imageView.image)")
+        }
+    }
+    
+    
+    func registerNotificationOfKeyboard(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    
+    func keyboardWillShow(sender: NSNotification) {
+        self.cameraButton.frame.origin.y -= 255
+        
+        let quesView = UIView(frame: CGRectMake(UIScreen.mainScreen().bounds.width/2-20, self.cameraButton.frame.origin.y+10, 40, 40))
+        quesView.tag = 100
+        quesView.backgroundColor = UIColor.clearColor()
+        
+        var text = UITextView(frame: CGRectMake(0, 50, 50,40))
+        text.text = "???"
+        text.textColor = UIColor.grayColor()
+        text.textAlignment = NSTextAlignment.Center
+        text.backgroundColor = UIColor.clearColor()
+        text.font = UIFont(name: "HelveticaNeue-Bold", size: 22)
+        
+        quesView.addSubview(text)
+        self.view.addSubview(quesView)
+    }
+    
+    
+    func keyboardWillHide(sender: NSNotification) {
+        self.cameraButton.frame.origin.y += 255
+        
+        var view  = self.view.viewWithTag(100)
+        view?.removeFromSuperview()
+    }
+
     
 }

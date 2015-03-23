@@ -29,6 +29,9 @@ class ReminderVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.title = "Reminders"
+//        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        
         rightbarBtn = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: "EditReminder")
         navigationItem.rightBarButtonItems = [rightbarBtn]
        
@@ -39,8 +42,6 @@ class ReminderVC: UITableViewController {
             timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
             println("My Time: \(timeChosen)")
         }
-        
-       
     }
 
     

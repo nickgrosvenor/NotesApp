@@ -41,10 +41,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let logo = UIImage(named: "uploadistLogo")
         let imageView = UIImageView(image:logo)
         self.navigationItem.titleView = imageView
-        
-        
-        
-        
+      
         bgTableView.dataSource = self
         bgTableView.delegate = self
         self.automaticallyAdjustsScrollViewInsets = false;
@@ -262,23 +259,51 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 //                println("BG Scrolling")
 //            }
 //        }
+        
+        
     }
     
-    var isScrolling = false
+//    var isScrolling = false
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath){
-        cell.layer.shouldRasterize = isScrolling
-        let lastRow = tableView.indexPathsForVisibleRows()?.last as NSIndexPath
-        let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-        bgTableView.setContentOffset(CGPointMake(0, CGFloat.max), animated: true)
-        bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
-  
+//        cell.layer.shouldRasterize = isScrolling
+//        let lastRow = tableView.indexPathsForVisibleRows()?.last as NSIndexPath
+//        let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+//        bgTableView.setContentOffset(CGPointMake(0, CGFloat.max), animated: true)
+//        bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+//        bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
+        
 //        var lastIndex = NSIndexPath(forRow: indexPath.row, inSection: 0)
 //        self.bgTableView.scrollToRowAtIndexPath(lastIndex, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+//        if let visibleCells = bgTableView.visibleCells() as? [ImageCell]{
+//            for parallaxCell in visibleCells{
+//                var yOffset = ((bgTableView.contentOffset.y - parallaxCell.frame.origin.y)/ImageHeight) * OffsetSpeed
+//                parallaxCell.offset(CGPointMake(0,yOffset))
+//                let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+//                bgTableView.setContentOffset(CGPointMake(0, CGFloat.max), animated: true)
+//                bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+//                bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
+//            }
+//        }
+        
+        UIView.animateWithDuration (1, delay: 500.0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+            if let visibleCells = self.bgTableView.visibleCells() as? [ImageCell]{
+                for parallaxCell in visibleCells{
+                    var yOffset = ((self.bgTableView.contentOffset.y - parallaxCell.frame.origin.y)/ImageHeight) * OffsetSpeed
+                    parallaxCell.offset(CGPointMake(0,yOffset))
+                    let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+                    self.bgTableView.setContentOffset(CGPointMake(0, yOffset), animated: true)
+                    self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+                    self.bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
+                }
+            }
+        },completion: {_ in
+              println("Completion")
+        })
     }
     
     
-    func visibleCellsShouldRasterize(aBool:Bool){
+  /*  func visibleCellsShouldRasterize(aBool:Bool){
         for cell in tableView.visibleCells() as [UITableViewCell]{
             cell.layer.shouldRasterize = aBool;
         }
@@ -288,6 +313,8 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         isScrolling = false
         self.visibleCellsShouldRasterize(isScrolling)
+        
+//        bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
     }
     
     
@@ -305,7 +332,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         
     }
     
-    
+ */
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if(tableView.tag == 100){
             let parallaxCell = tableView.dequeueReusableCellWithIdentifier("ImageCell", forIndexPath: indexPath) as ImageCell
@@ -367,7 +394,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     // Table View Delegate & DataSource Method
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
         if(tableView.tag == 100){
             
         }
@@ -384,13 +410,10 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             var dateComparisionResult:NSComparisonResult = d2.compare(d1)
             
             if dateComparisionResult == NSComparisonResult.OrderedSame {
-                
                 showDetailVC(indexPath.section, row: indexPath.row)
             }
             else if dateComparisionResult == NSComparisonResult.OrderedAscending {
-                
-                
-                // Mark check for current Data in parse
+               // Mark check for current Data in parse
                 if(parseData.count>0)
                 {
                     var isfound = false
@@ -432,7 +455,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     }
                     
                     if !isfound{
-                        let alert = UIAlertView(title: nil, message: "First enter todays Entry", delegate: nil, cancelButtonTitle: "OK")
+                        let alert = UIAlertView(title: nil, message: "First, Enter today's note !! ", delegate: nil, cancelButtonTitle: "OK")
                         alert.show()
                     }
                     else{
@@ -440,18 +463,15 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     }
                 }
                 else{
-                    let alert = UIAlertView(title: nil, message: "First enter todays Entry", delegate: nil, cancelButtonTitle: "OK")
+                    let alert = UIAlertView(title: nil, message: "First, Enter today's note !! ", delegate: nil, cancelButtonTitle: "OK")
                     alert.show()
                 }
             }
-            
         }
-        
     } // end of Method
     
     
     func showDetailVC(section:Int,row:Int){
-        
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ShowNoteVC") as ShowNotesVC
         vc.dateArray = dateArray
         vc.parseData = parseData
@@ -459,7 +479,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         vc.index = row
         vc.fromAdd = 0
         self.navigationController?.pushViewController(vc, animated: true)
-        
     }
     
     
@@ -507,13 +526,10 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         
         if(tableView.tag == 100){
             return UIScreen.mainScreen().bounds.height
-//            return 200
         }
         else{
             return 107
         }
-        
-        
     }
     
   /*
@@ -549,14 +565,14 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         var day : String = "" //weekDay as String
         
         switch today {
-        case 1:      day = "Sunday"
-        case 2:      day = "Monday"
-        case 3:      day = "Tuesday"
-        case 4:      day = "Wednesday"
-        case 5:      day = "Thursday"
-        case 6:      day = "Friday"
-        case 7:      day = "Saturday"
-        default:     day = "Ankit"
+            case 1:      day = "Sunday"
+            case 2:      day = "Monday"
+            case 3:      day = "Tuesday"
+            case 4:      day = "Wednesday"
+            case 5:      day = "Thursday"
+            case 6:      day = "Friday"
+            case 7:      day = "Saturday"
+            default:     day = " "
             break
         }
         
@@ -567,19 +583,19 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     func getMonthName(today: Int) -> String {
         var currentMonth = ""
         switch today {
-        case 1:      currentMonth = "JANUARY"
-        case 2:      currentMonth = "FEBRUARY"
-        case 3:      currentMonth = "MARCH"
-        case 4:      currentMonth = "APRIL"
-        case 5:      currentMonth = "MAY"
-        case 6:      currentMonth = "JUNE"
-        case 7:      currentMonth = "JULY"
-        case 8:      currentMonth = "AUGUST"
-        case 9:      currentMonth = "SEPTEMBER"
-        case 10:     currentMonth = "OCTOBER"
-        case 11:     currentMonth = "NOVEMBER"
-        case 12:     currentMonth = "DECEMBER"
-        default:     currentMonth = "Ankit"
+            case 1:      currentMonth = "JANUARY"
+            case 2:      currentMonth = "FEBRUARY"
+            case 3:      currentMonth = "MARCH"
+            case 4:      currentMonth = "APRIL"
+            case 5:      currentMonth = "MAY"
+            case 6:      currentMonth = "JUNE"
+            case 7:      currentMonth = "JULY"
+            case 8:      currentMonth = "AUGUST"
+            case 9:      currentMonth = "SEPTEMBER"
+            case 10:     currentMonth = "OCTOBER"
+            case 11:     currentMonth = "NOVEMBER"
+            case 12:     currentMonth = "DECEMBER"
+            default:     currentMonth = " "
             break
         }
         
@@ -633,8 +649,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     
-    func fetchDataFromParse()
-    {
+    func fetchDataFromParse(){
         self.parseData.removeAll()
         JHProgressHUD.sharedHUD.showInView(UIApplication.sharedApplication().keyWindow!, withHeader: "Loading", andFooter: "")
         

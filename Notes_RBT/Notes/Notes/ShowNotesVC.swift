@@ -19,15 +19,12 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     var fromAdd = 0
     var isDeleted = false
     
-    
     // Array
     var dateArray = [AnyObject]()
     var parseData = [AnyObject]()
     var tableData = [NSDate]()
     let dateFormter = NSDateFormatter()
     var rightbarBtn = UIBarButtonItem()
-    var randomBGImages = ["1BG","2BG","3BG","4BG","5BG","6BG","7BG","8BG","9BG","10BG","11BG","12BG","13BG","14BG.png","15BG","16BG","17BG","18BG","19BG","20BG","21BG","22BG","23BG","24BG.png","25BG","26BG","27BG","28BG.png","29BG.png","30BG","31BG","32BG","33BG","34BG","35BG","36BG","37BG","38BG","39BG","40BG","41BG","42BG","44BG","45BG","46BG","47BG","43BG.png"]
-    
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var removeButton: UIButton!
@@ -37,24 +34,14 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        self.navigationController?.navigationBarHidden = true
+        
         shareButton.hidden = false
         removeButton.hidden = true
         
         tableView.pagingEnabled = true
         tableView.dataSource = self
         tableView.delegate = self
-        
-        
-        // Move view when keyboard appears
-        registerNotificationOfKeyboard()
-        
-        
-        // Dismiss Keyboard
-        let aSelector : Selector = "touchOutsideTextView"
-        let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
-        tapGesture.numberOfTapsRequired = 1
-        view.addGestureRecognizer(tapGesture)
         
         // Change textview text color
 //        changeTextColor()
@@ -107,7 +94,16 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         
         let indexPath = NSIndexPath(forRow: currentElement, inSection: 0)
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-    }
+        
+        // Dismiss Keyboard
+        let aSelector : Selector = "touchOutsideTextView"
+        let tapGesture = UITapGestureRecognizer(target: self, action: aSelector)
+        tapGesture.numberOfTapsRequired = 1
+        view.addGestureRecognizer(tapGesture)
+        
+        // Move view when keyboard appears
+        registerNotificationOfKeyboard()
+   }
     
     
     override func viewDidAppear(animated: Bool) {
@@ -124,7 +120,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func checkDataContains()->Bool{
-        
         let date = tableData[currentElement] as NSDate
         let userCalendar = NSCalendar.currentCalendar()
         var dateComp = userCalendar.components(.CalendarUnitDay | .CalendarUnitWeekday, fromDate: date)
@@ -155,13 +150,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
    
-    func touchOutsideTextView(){
-        self.view.endEditing(true)
-    }
-    
-    
     func showPopupWithText() {
-        
         var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
         var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
         
@@ -192,8 +181,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
         
-    func closeButtonAction(sender:UIButton!)
-    {
+    func closeButtonAction(sender:UIButton!) {
         var view  = self.view.viewWithTag(1000)
         view?.removeFromSuperview()
         tableView.scrollEnabled = true
@@ -299,7 +287,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     func saveDataInParse(){
-       
         var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
         var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
         
@@ -416,9 +403,9 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                                 }
                             }
                             else{
-                                cell.bgImage.backgroundColor = UIColor.blackColor()
-                                cell.bgImage.image = self.getRandomImageFromAssets()
-                                cell.noteLbl.textColor = UIColor.whiteColor()
+//                                cell.bgImage.backgroundColor = UIColor.blackColor()
+//                                cell.bgImage.image = self.getRandomImageFromAssets()
+//                                cell.noteLbl.textColor = UIColor.whiteColor()
                             }
                         }
                     })
@@ -431,6 +418,13 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             }
         }
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: "showNavigationBar")
+        tapGesture.numberOfTapsRequired = 1
+        cell.addGestureRecognizer(tapGesture)
+
+        
+        cell.bgImage.image = nil
+        
         if isfound{
             cell.noteLbl.text = noteData
             cell.noteLbl.textColor = UIColor.blackColor()
@@ -438,7 +432,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             cell.noteLbl.text = ""
         }
 
-        cell.bgImage.image = nil
         
         if cell.noteLbl.text != "" {
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "showPopupWithText")
@@ -467,10 +460,20 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
     
+    func showNavigationBar(){
+       navigationController?.navigationBarHidden = false
+    }
+    
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        navigationController?.navigationBarHidden = true
+    }
+
+    
     func autoResizeText(cell:ShowDetailsCell){
         cell.noteLbl.textAlignment = NSTextAlignment.Center
         var textLength = countElements(cell.noteLbl.text)
-        println("Length: \(textLength)")
+//        println("Length: \(textLength)")
         
         if textLength > 35 {
             cell.noteLbl.font = UIFont.boldSystemFontOfSize(20)
@@ -482,20 +485,12 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     func textViewDidChange(textView: UITextView) {
         var textLength = countElements(textView.text)
-        println("Length: \(textLength)")
 
         if textLength > 35 {
             textView.font = UIFont.boldSystemFontOfSize(20)
         }else{
             textView.font = UIFont.boldSystemFontOfSize(30)
         }
-    }
-    
-    
-    func getRandomImageFromAssets() -> UIImage{
-        var randomIndex = Int(arc4random_uniform(UInt32(randomBGImages.count)))
-        var noteImage = UIImage(named: "\(randomBGImages[randomIndex])")
-        return noteImage!
     }
     
     
@@ -511,7 +506,12 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
     {
-        
+//        var cell = tableView.dequeueReusableCellWithIdentifier("ShowDetailsCell") as ShowDetailsCell
+//        
+//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "showNavigationBar:")
+//        tapGestureRecognizer.numberOfTapsRequired = 1
+//        cell.bgImage.addGestureRecognizer(tapGestureRecognizer)
+//        println("Show My Bar")
     }
     
     
@@ -576,14 +576,15 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         var cell = self.tableView.cellForRowAtIndexPath(indexPaths[0]) as ShowDetailsCell
         cell.noteLbl.textColor = UIColor.blackColor()
         cell.bgImage.image = bgImage
+        cell.bgImage.contentMode = UIViewContentMode.ScaleAspectFill
         self.isDeleted = false
+        
         if(cell.bgImage.image == nil){
-            
             cell.noteLbl.textColor = UIColor.blackColor()
             cell.bgImage.backgroundColor = UIColor.whiteColor()
             
         }else{
-            cell.bgImage.alpha = 0.75
+            cell.bgImage.alpha = 0.95
             cell.noteLbl.textColor = UIColor.whiteColor()
             cell.bgImage.backgroundColor = UIColor.blackColor()
         }
@@ -636,16 +637,22 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
     
+    func registerNotificationOfKeyboard(){
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
+    }
+    
+   
     func keyboardWillShow(sender: NSNotification) {
        self.removeButton.frame.origin.y -= 255
-        tableView.scrollEnabled = false
+       tableView.scrollEnabled = false
     }
     
     
     func keyboardWillHide(sender: NSNotification) {
         self.removeButton.frame.origin.y += 255
         tableView.scrollEnabled = true
-    
+        
         if(self.navigationItem.rightBarButtonItem?.title == "Done"){
             self.navigationItem.rightBarButtonItem?.title = "Edit"
         }else{
@@ -664,8 +671,10 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     }
    
     
-    func registerNotificationOfKeyboard(){
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
+    func touchOutsideTextView(){
+        self.view.endEditing(true)
     }
+    
+    
+    
 }

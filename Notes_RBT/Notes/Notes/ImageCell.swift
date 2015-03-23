@@ -8,7 +8,7 @@
 
 import UIKit
 
-let ImageHeight: CGFloat = 200.0
+let ImageHeight: CGFloat = 573.0
 let OffsetSpeed: CGFloat = 25.0
 
 

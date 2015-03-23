@@ -18,7 +18,8 @@ class OptionVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.barTintColor = UIColor.blackColor()
-     
+//        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        
         datePicker.hidden = true;
     }
     

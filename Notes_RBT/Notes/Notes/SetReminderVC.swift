@@ -20,7 +20,7 @@ class SetReminderVC: UIViewController {
         navigationItem.leftBarButtonItems = [leftbarBtn]
  
         self.navigationItem.title = "Time"
-       
+//        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
     }
 
     
