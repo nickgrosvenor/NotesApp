@@ -378,11 +378,11 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         self.placeholderLabel.frame.origin.y -= 255
         self.crossButton.frame.origin.y -= 255
         
-        let quesView = UIView(frame: CGRectMake(UIScreen.mainScreen().bounds.width/2-30, self.cameraButton.frame.origin.y+10, 60, 80))
+        let quesView = UIView(frame: CGRectMake(UIScreen.mainScreen().bounds.width/2-10, self.cameraButton.frame.origin.y+10, 60, 100))
         quesView.tag = 100
         quesView.backgroundColor = UIColor.clearColor()
         
-        var text = UITextView(frame: CGRectMake(0, 50, 60, 80))
+        var text = UITextView(frame: CGRectMake(0, 50, 60, 100))
         text.text = "???"
         text.textColor = UIColor.grayColor()
         text.textAlignment = NSTextAlignment.Center
