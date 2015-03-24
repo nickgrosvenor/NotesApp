@@ -442,7 +442,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         self.removeButton.setBackgroundImage(UIImage(named:"Camera Icon"), forState: UIControlState.Normal)
         
         autoResizeText(cell)
-//        changeTextColor(cell)
         
         return cell
     }
@@ -473,7 +472,6 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     func autoResizeText(cell:ShowDetailsCell){
         cell.noteLbl.textAlignment = NSTextAlignment.Center
         var textLength = countElements(cell.noteLbl.text)
-//        println("Length: \(textLength)")
         
         if textLength > 35 {
             cell.noteLbl.font = UIFont.boldSystemFontOfSize(20)
@@ -504,15 +502,7 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     }
     
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
-    {
-//        var cell = tableView.dequeueReusableCellWithIdentifier("ShowDetailsCell") as ShowDetailsCell
-//        
-//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "showNavigationBar:")
-//        tapGestureRecognizer.numberOfTapsRequired = 1
-//        cell.bgImage.addGestureRecognizer(tapGestureRecognizer)
-//        println("Show My Bar")
-    }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) { }
     
     
     @IBAction func shareButtonPressed(sender: AnyObject){

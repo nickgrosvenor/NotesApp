@@ -93,7 +93,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
-        println("Ankti login")
         self.dismissViewControllerAnimated(true, completion: nil)
         fetchDataFromParse()
     }
@@ -112,7 +111,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
-        println("Ankiti login")
         self.dismissViewControllerAnimated(true, completion: nil)
         fetchDataFromParse()
     }
@@ -298,7 +296,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 }
             }
         },completion: {_ in
-              println("Completion")
+//              println("Completion")
         })
     }
     

@@ -30,7 +30,7 @@ class ReminderVC: UITableViewController {
         super.viewDidLoad()
 
         self.navigationItem.title = "Reminders"
-//        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.blackColor()
         
         rightbarBtn = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: "EditReminder")
         navigationItem.rightBarButtonItems = [rightbarBtn]
@@ -43,8 +43,14 @@ class ReminderVC: UITableViewController {
             println("My Time: \(timeChosen)")
         }
     }
-
+   
     
+    override func viewWillAppear(animated: Bool) {
+        let titleDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.blueColor()]
+        self.navigationController?.navigationBar.titleTextAttributes = titleDict
+    }
+    
+        
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

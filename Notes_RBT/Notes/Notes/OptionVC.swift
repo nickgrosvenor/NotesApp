@@ -17,11 +17,15 @@ class OptionVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.barTintColor = UIColor.blackColor()
-//        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
-        
+
         datePicker.hidden = true;
     }
+    
+    
+    override func viewWillAppear(animated: Bool) {
+        self.navigationController?.navigationBar.barTintColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1)
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -54,9 +58,9 @@ class OptionVC: UIViewController {
         PFUser.logOut()
         self.navigationController?.popViewControllerAnimated(true)
     }
+ 
     
   /*
-    
     func scheduleLocalNotification() {
         var localNotification = UILocalNotification()
         localNotification.fireDate = fixNotificationDate(datePicker.date)
