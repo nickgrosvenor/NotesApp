@@ -12,18 +12,19 @@ import UIKit
 class OptionVC: UIViewController {
    
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var datePicker: UIDatePicker!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        datePicker.hidden = true;
+        
+        self.navigationItem.title = "Settings"
     }
     
     
     override func viewWillAppear(animated: Bool) {
-        self.navigationController?.navigationBar.barTintColor = UIColor(red: 247/255.0, green: 247/255.0, blue: 247/255.0, alpha: 1)
+        self.navigationController?.navigationBar.barTintColor = UIColor(red:247/255.0, green:247/255.0, blue:247/255.0, alpha: 1)
+        self.navigationController?.navigationBar.tintColor = UIColor(red:73.0/255.0, green: 155.0/255.0, blue: 255.0/255.0, alpha:1.0)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.clearColor()]
     }
     
     
@@ -40,17 +41,6 @@ class OptionVC: UIViewController {
     @IBAction func reminderButtonPressed(sender: AnyObject) {
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("ReminderVC") as ReminderVC
         self.navigationController?.pushViewController(vc, animated: true)
-        
-//        if(datePicker.hidden == true){
-//            datePicker.hidden = false
-//        }
-//        else{
-//            var alert = UIAlertView(title: "Reminder Set", message: String(format: "Reminder Set for %@", datePicker.date), delegate: nil, cancelButtonTitle: "OK")
-//            alert.show()
-//            
-//            datePicker.hidden = true
-//            scheduleLocalNotification()
-//        }
     }
     
     
@@ -58,31 +48,6 @@ class OptionVC: UIViewController {
         PFUser.logOut()
         self.navigationController?.popViewControllerAnimated(true)
     }
- 
     
-  /*
-    func scheduleLocalNotification() {
-        var localNotification = UILocalNotification()
-        localNotification.fireDate = fixNotificationDate(datePicker.date)
-        localNotification.alertBody = "Hey, Check you Notes."
-        localNotification.alertAction = "Notes"
-        localNotification.repeatInterval = .CalendarUnitDay
-        localNotification.applicationIconBadgeNumber = UIApplication.sharedApplication().applicationIconBadgeNumber + 1
-        
-        UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
-    }
-    
-    
-    func fixNotificationDate(dateToFix: NSDate) -> NSDate {
-        var dateComponets: NSDateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.DayCalendarUnit | NSCalendarUnit.MonthCalendarUnit | NSCalendarUnit.YearCalendarUnit | NSCalendarUnit.HourCalendarUnit | NSCalendarUnit.MinuteCalendarUnit, fromDate: dateToFix)
-        
-        dateComponets.second = 0
-        var fixedDate: NSDate! = NSCalendar.currentCalendar().dateFromComponents(dateComponets)
-        
-        return fixedDate
-    }
-    
-        
-   */
 
 }

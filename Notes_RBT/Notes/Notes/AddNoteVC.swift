@@ -27,6 +27,8 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
     var dateTitle: String = ""
     var bgImage: UIImage!
     var rightbarBtn = UIBarButtonItem()
+    var questionText = UITextView()
+    
     var placeholderArray : [String] = ["What’d you do?","What upset you?","Learn anything?","Buy anything?","Go anywhere?","Looking forward to anything?","Talk to anyone different?","New ideas?","Tell me about this fine day?"]
     var randomBGImages = ["1BG","2BG","3BG","4BG","5BG","6BG","7BG","8BG","9BG","10BG","11BG","12BG","13BG","14BG.png","15BG","16BG","17BG","18BG","19BG","20BG","21BG","22BG","23BG","24BG.png","25BG","26BG","27BG","28BG.png","29BG.png","30BG","31BG","32BG","33BG","34BG","35BG","36BG","37BG","38BG","39BG","40BG","41BG","42BG","44BG","45BG","46BG","47BG","43BG.png"]
   
@@ -69,6 +71,8 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         let dateFormter = NSDateFormatter()
         dateFormter.dateFormat = "MMM dd, yyyy"
         dateTitle = dateFormter.stringFromDate(currentDate as NSDate)
+        self.navigationItem.title = dateTitle
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.blackColor()]
         
         
         // Placeholder text
@@ -382,14 +386,14 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         quesView.tag = 100
         quesView.backgroundColor = UIColor.clearColor()
         
-        var text = UITextView(frame: CGRectMake(0, 50, 60, 100))
-        text.text = "???"
-        text.textColor = UIColor.grayColor()
-        text.textAlignment = NSTextAlignment.Center
-        text.backgroundColor = UIColor.clearColor()
-        text.font = UIFont(name: "HelveticaNeue", size: 28)
-        
-        quesView.addSubview(text)
+        questionText = UITextView(frame: CGRectMake(0, 50, 60, 100))
+        questionText.text = "???"
+        questionText.textColor = UIColor.grayColor()
+        questionText.textAlignment = NSTextAlignment.Center
+        questionText.backgroundColor = UIColor.clearColor()
+        questionText.font = UIFont(name: "HelveticaNeue", size: 28)
+       
+        quesView.addSubview(questionText)
         self.view.addSubview(quesView)
     }
     

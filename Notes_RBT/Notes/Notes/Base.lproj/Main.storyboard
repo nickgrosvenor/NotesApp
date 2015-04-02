@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="8v5-tE-tkz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="8v5-tE-tkz">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -17,6 +17,8 @@
                         <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="kwi-KN-LPR">
                             <rect key="frame" x="0.0" y="73" width="600" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.87559107730263153" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <state key="normal" title="Add Reminder">
                                 <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -31,18 +33,8 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xPH-8h-cCI" id="Wbj-rL-EVC">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPg-df-arz">
-                                            <rect key="frame" x="416" y="8" width="160" height="35"/>
-                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="160" id="NFW-P2-HeH"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dyi-I1-qSu">
-                                            <rect key="frame" x="40" y="9" width="92" height="33"/>
+                                            <rect key="frame" x="28" y="9" width="92" height="33"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="92" id="r6j-8v-B14"/>
                                             </constraints>
@@ -50,13 +42,23 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPg-df-arz">
+                                            <rect key="frame" x="421" y="8" width="160" height="35"/>
+                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="160" id="NFW-P2-HeH"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottomMargin" secondItem="lPg-df-arz" secondAttribute="bottom" constant="-1" id="W1r-wS-XsJ"/>
                                         <constraint firstItem="lPg-df-arz" firstAttribute="top" secondItem="Wbj-rL-EVC" secondAttribute="topMargin" id="b9y-b0-603"/>
                                         <constraint firstItem="dyi-I1-qSu" firstAttribute="top" secondItem="Wbj-rL-EVC" secondAttribute="topMargin" constant="1" id="e5h-Mg-yVf"/>
-                                        <constraint firstItem="dyi-I1-qSu" firstAttribute="leading" secondItem="Wbj-rL-EVC" secondAttribute="leadingMargin" constant="32" id="iOh-Hj-QKZ"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="lPg-df-arz" secondAttribute="trailing" constant="16" id="l1P-fL-E4L"/>
+                                        <constraint firstItem="dyi-I1-qSu" firstAttribute="leading" secondItem="Wbj-rL-EVC" secondAttribute="leadingMargin" constant="20" id="iOh-Hj-QKZ"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="lPg-df-arz" secondAttribute="trailing" constant="11" id="l1P-fL-E4L"/>
                                         <constraint firstItem="dyi-I1-qSu" firstAttribute="bottom" secondItem="Wbj-rL-EVC" secondAttribute="bottomMargin" id="npY-kD-GCo"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -357,15 +359,9 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Reminder BG" translatesAutoresizingMaskIntoConstraints="NO" id="YAU-tA-aB7">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="Egr-9B-N8S">
-                                <rect key="frame" x="0.0" y="271" width="600" height="162"/>
-                                <date key="date" timeIntervalSinceReferenceDate="448115406.58220202">
-                                    <!--2015-03-15 12:30:06 +0000-->
-                                </date>
-                            </datePicker>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AXE-Yo-lBZ">
                                 <rect key="frame" x="100" y="228" width="400" height="39"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.14999999999999999" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="qzd-Om-jm0"/>
                                 </constraints>
@@ -379,7 +375,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w6U-hQ-p1G">
                                 <rect key="frame" x="100" y="483" width="400" height="39"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.14999999999999999" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="REMINDERS">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -390,7 +386,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fKX-Ci-2b9">
                                 <rect key="frame" x="100" y="541" width="400" height="39"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.14999999999999999" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="SIGN OUT">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -404,31 +400,20 @@
                         <constraints>
                             <constraint firstItem="0Rw-eY-X2q" firstAttribute="top" secondItem="YAU-tA-aB7" secondAttribute="bottom" id="ElG-Rc-NP5"/>
                             <constraint firstItem="fKX-Ci-2b9" firstAttribute="top" secondItem="w6U-hQ-p1G" secondAttribute="bottom" constant="19" id="JEl-Aw-4eg"/>
-                            <constraint firstItem="Egr-9B-N8S" firstAttribute="top" secondItem="STF-0b-Yki" secondAttribute="bottom" constant="251" id="LpX-Ff-tH4"/>
                             <constraint firstItem="AXE-Yo-lBZ" firstAttribute="trailing" secondItem="w6U-hQ-p1G" secondAttribute="trailing" id="OKu-dw-PWf"/>
-                            <constraint firstItem="Egr-9B-N8S" firstAttribute="leading" secondItem="dk3-lB-CBm" secondAttribute="leadingMargin" constant="-16" id="QvN-40-Mcz"/>
                             <constraint firstItem="fKX-Ci-2b9" firstAttribute="trailing" secondItem="w6U-hQ-p1G" secondAttribute="trailing" id="RhT-5g-EEg"/>
                             <constraint firstAttribute="bottom" secondItem="fKX-Ci-2b9" secondAttribute="bottom" constant="20" symbolic="YES" id="RoZ-Dg-Jcc"/>
                             <constraint firstItem="w6U-hQ-p1G" firstAttribute="centerX" secondItem="YAU-tA-aB7" secondAttribute="centerX" id="ckE-RR-oav"/>
                             <constraint firstItem="AXE-Yo-lBZ" firstAttribute="top" secondItem="STF-0b-Yki" secondAttribute="bottom" constant="208" id="e0h-Xr-Aqa"/>
                             <constraint firstItem="YAU-tA-aB7" firstAttribute="top" secondItem="STF-0b-Yki" secondAttribute="bottom" constant="-20" id="faj-FW-mII"/>
                             <constraint firstItem="AXE-Yo-lBZ" firstAttribute="leading" secondItem="w6U-hQ-p1G" secondAttribute="leading" id="iMp-Ct-yNG"/>
-                            <constraint firstItem="0Rw-eY-X2q" firstAttribute="top" secondItem="Egr-9B-N8S" secondAttribute="bottom" constant="167" id="iT9-y4-vQs"/>
                             <constraint firstItem="fKX-Ci-2b9" firstAttribute="leading" secondItem="w6U-hQ-p1G" secondAttribute="leading" id="ip3-Lc-1ao"/>
                             <constraint firstAttribute="trailingMargin" secondItem="YAU-tA-aB7" secondAttribute="trailing" constant="-16" id="n3t-Xe-7xd"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Egr-9B-N8S" secondAttribute="trailing" constant="-16" id="oCa-eA-KPV"/>
                             <constraint firstItem="YAU-tA-aB7" firstAttribute="leading" secondItem="dk3-lB-CBm" secondAttribute="leadingMargin" constant="-16" id="vXP-QV-L39"/>
-                            <constraint firstItem="Egr-9B-N8S" firstAttribute="top" secondItem="STF-0b-Yki" secondAttribute="bottom" constant="251" id="w1P-IA-URP"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="LpX-Ff-tH4"/>
-                            </mask>
-                        </variation>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="datePicker" destination="Egr-9B-N8S" id="A23-7l-TnU"/>
                         <outlet property="imageView" destination="YAU-tA-aB7" id="Z9i-VR-4i5"/>
                     </connections>
                 </viewController>

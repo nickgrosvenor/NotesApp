@@ -12,33 +12,31 @@ class SetReminderVC: UIViewController {
 
     @IBOutlet var reminderDatePicker: UIDatePicker!
    
+    internal var userDateChosen = NSDate()
+    internal var dateChosen = NSDate()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var leftbarBtn = UIBarButtonItem(title: "Reminders", style: UIBarButtonItemStyle.Plain, target: self, action: "PickDateFromDatePicker")
-        navigationItem.leftBarButtonItems = [leftbarBtn]
- 
         self.navigationItem.title = "Time"
+        reminderDatePicker.datePickerMode = UIDatePickerMode.Time
+        
+        reminderDatePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        
     }
-
+    
+    
+    func datePickerChanged(datePicker:UIDatePicker) {
+        userDateChosen = datePicker.date
+        NSUserDefaults.standardUserDefaults().setObject(userDateChosen, forKey: "Set Reminder")
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    
-    func PickDateFromDatePicker() {
-        var dateChosen = reminderDatePicker.date
-        
-        reminderDatePicker.datePickerMode = UIDatePickerMode.Time
-        
-        println("Date: \(dateChosen)")
-        NSUserDefaults.standardUserDefaults().setObject(dateChosen, forKey: "Set Reminder")
-        NSUserDefaults.standardUserDefaults().synchronize()
-        
-        self.navigationController?.popViewControllerAnimated(true)
-    }
 
   
 }

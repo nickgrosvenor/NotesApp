@@ -28,28 +28,43 @@ class ReminderVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        if isViewLoaded(){
+            setValueForReminder()
+        }
+        
         self.navigationItem.title = "Reminders"
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController?.navigationBar.barTintColor = UIColor.blackColor()
         
         rightbarBtn = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: "EditReminder")
         navigationItem.rightBarButtonItems = [rightbarBtn]
        
-        if(NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") == nil){
-            timeChosen = NSDate.defaultTime()
-            println("My Time: \(timeChosen)")
-        }else{
-            timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
-            println("My Time: \(timeChosen)")
-        }
+//        if(NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") == nil){
+//            timeChosen = NSDate.defaultTime()
+//            println("My Time: \(timeChosen)")
+//        }else{
+//            timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
+//            println("My Time: \(timeChosen)")
+//        }
     }
    
     
     override func viewWillAppear(animated: Bool) {
-        let titleDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.blueColor()]
+        let titleDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         self.navigationController?.navigationBar.titleTextAttributes = titleDict
     }
     
+    
+    func setValueForReminder(){
+        if(NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") == nil) {
+            timeChosen = NSDate.defaultTime()
+        } else {
+            timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
+            println("From NS: \(timeChosen)")
+        }
+    }
+
         
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -71,15 +86,14 @@ class ReminderVC: UITableViewController {
 
         
         if(indexPath.row == 0){
-           var dateComponets: NSDateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.HourCalendarUnit | NSCalendarUnit.MinuteCalendarUnit, fromDate: timeChosen)
+            var dateComponets: NSDateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.HourCalendarUnit | NSCalendarUnit.MinuteCalendarUnit, fromDate: timeChosen)
             dateComponets.second = 0
             var selectedDate: NSDate! = NSCalendar.currentCalendar().dateFromComponents(dateComponets)
             
             let formatter = NSDateFormatter()
-            formatter.timeZone = NSTimeZone.localTimeZone()
-            formatter.dateFormat = "HH:MM a"
+            formatter.timeStyle = NSDateFormatterStyle.ShortStyle
             
-            cell.reminderValue?.text = formatter.stringFromDate(selectedDate)
+            cell.reminderValue?.text = formatter.stringFromDate(timeChosen)
         }else{
             cell.reminderValue?.text = "Daily"
         }

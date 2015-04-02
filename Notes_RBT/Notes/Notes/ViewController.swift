@@ -29,7 +29,10 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var currentLocation = CGFloat(0)
     let userCalendar = NSCalendar.currentCalendar()
     let dateFormter = NSDateFormatter()
-    
+    var defaultVisibleCells: [AnyObject] = []
+    var scrolledCells: [AnyObject] = []
+    var changeBG: Bool = false
+
    
     
     
@@ -48,6 +51,8 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 
         tableView.dataSource = self
         tableView.delegate = self
+        
+        defaultVisibleCells = self.tableView.visibleCells() as [AnyObject]
         
         getDateData(false)
     }
@@ -258,11 +263,22 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 //            }
 //        }
         
+        var scrollVisibleCells = self.tableView.visibleCells() as [AnyObject]
         
+        for svCells in scrollVisibleCells {
+            if (defaultVisibleCells as NSArray).containsObject(svCells as AnyObject){
+                //                println("Don't change")
+                changeBG = false
+            }else{
+                //                println("Change the BG !! ")
+                changeBG = true
+                self.bgTableView.scrollEnabled = true
+            }
+        }
+
     }
     
-//    var isScrolling = false
-    
+
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath){
 //        cell.layer.shouldRasterize = isScrolling
 //        let lastRow = tableView.indexPathsForVisibleRows()?.last as NSIndexPath
@@ -283,54 +299,28 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 //                bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
 //            }
 //        }
-        
-        UIView.animateWithDuration (1, delay: 500.0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
-            if let visibleCells = self.bgTableView.visibleCells() as? [ImageCell]{
-                for parallaxCell in visibleCells{
-                    var yOffset = ((self.bgTableView.contentOffset.y - parallaxCell.frame.origin.y)/ImageHeight) * OffsetSpeed
-                    parallaxCell.offset(CGPointMake(0,yOffset))
-                    let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-                    self.bgTableView.setContentOffset(CGPointMake(0, yOffset), animated: true)
-                    self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
-                    self.bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
+        if changeBG {
+            UIView.animateWithDuration (1, delay: 50.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+                if let visibleCells = self.bgTableView.visibleCells() as? [ImageCell]{
+                    for parallaxCell in visibleCells{
+                        var yOffset = ((self.bgTableView.contentOffset.y - parallaxCell.frame.origin.y)/ImageHeight) * OffsetSpeed
+                        let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+                        self.bgTableView.setContentOffset(CGPointMake(0, yOffset), animated: true)
+                        self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                        //                        self.bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
+                        self.bgTableView.scrollEnabled = false
+                    }
                 }
-            }
-        },completion: {_ in
-//              println("Completion")
-        })
-    }
-    
-    
-  /*  func visibleCellsShouldRasterize(aBool:Bool){
-        for cell in tableView.visibleCells() as [UITableViewCell]{
-            cell.layer.shouldRasterize = aBool;
+                },completion: {_ in
+            })
+            changeBG = false
+        }
+        else{
+            //            println("ChangeBG False")
         }
     }
     
-    
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        isScrolling = false
-        self.visibleCellsShouldRasterize(isScrolling)
-        
-//        bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
-    }
-    
-    
-    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if velocity == CGPointZero{
-            isScrolling = false
-            self.visibleCellsShouldRasterize(isScrolling)
-        }
-    }
-    
-    
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        isScrolling = true
-        self.visibleCellsShouldRasterize(isScrolling)
-        
-    }
-    
- */
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if(tableView.tag == 100){
             let parallaxCell = tableView.dequeueReusableCellWithIdentifier("ImageCell", forIndexPath: indexPath) as ImageCell
@@ -379,7 +369,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             cell.weekDayLbl.textColor = UIColor.whiteColor()
             cell.noteLabel.textColor = UIColor.whiteColor()
             
-            cell.dateLabel.font = UIFont(name: "HelveticaNeue-Ultralight", size: 32)
+            cell.dateLabel.font = UIFont(name: "HelveticaNeue-Ultralight", size: 34)
             cell.weekDayLbl.font = UIFont(name: "HelveticaNeue-Light", size: 12)
             cell.noteLabel.font = UIFont(name: "HelveticaNeue-Light", size: 20)
             
