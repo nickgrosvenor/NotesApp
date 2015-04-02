@@ -29,9 +29,9 @@ class ReminderVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if isViewLoaded(){
+//        if isViewLoaded(){
             setValueForReminder()
-        }
+//        }
         
         self.navigationItem.title = "Reminders"
         self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
@@ -57,12 +57,20 @@ class ReminderVC: UITableViewController {
     
     
     func setValueForReminder(){
-        if(NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") == nil) {
-            timeChosen = NSDate.defaultTime()
-        } else {
-            timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
-            println("From NS: \(timeChosen)")
+//        if(NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") == nil) {
+//            timeChosen = NSDate.defaultTime()
+//        } else {
+//            timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
+//            println("From NS: \(timeChosen)")
+//        }
+        
+        var defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        
+        if let pickerTime = defaults.objectForKey("Set Reminder") as? NSDate {
+            timeChosen = defaults.objectForKey("Set Reminder") as NSDate
+            println("Time NS: \(timeChosen)")
         }
+        
     }
 
         
@@ -99,17 +107,20 @@ class ReminderVC: UITableViewController {
         }
         
         cell.reminderLabel.text = parameters[indexPath.row]
-        println(cell.reminderValue.text)
-
         return cell
     }
    
     
     @IBAction func AddReminderButtonPressed(sender: AnyObject) {
         scheduleLocalNotification()
-        println("Add my reminder!! ")
+        var alert = UIAlertController(title: nil, message: "Reminder Added !!", preferredStyle: UIAlertControllerStyle.Alert)
         
-        self.navigationController?.popViewControllerAnimated(true)
+        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action: UIAlertAction!) in
+            println("Reminder Added")
+            self.navigationController?.popViewControllerAnimated(true)
+        }))
+        
+        self.presentViewController(alert, animated: true, completion: nil)
     }
         
         
