@@ -13,7 +13,7 @@ extension NSDate
     class func defaultTime() -> NSDate
     {
         let calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)!
-        return calendar.dateWithEra(1, year: 2015, month: 1, day: 1, hour: 9, minute: 59, second: 0, nanosecond: 0)!
+        return calendar.dateWithEra(1, year: 2015, month: 1, day: 1, hour: 9, minute: 30, second: 0, nanosecond: 0)!
     }
 }
 
@@ -28,11 +28,7 @@ class ReminderVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        if isViewLoaded(){
-            setValueForReminder()
-//        }
-        
+    
         self.navigationItem.title = "Reminders"
         self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController?.navigationBar.barTintColor = UIColor.blackColor()
@@ -47,6 +43,8 @@ class ReminderVC: UITableViewController {
 //            timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
 //            println("My Time: \(timeChosen)")
 //        }
+        
+        setValueForReminder()
     }
    
     
@@ -57,20 +55,12 @@ class ReminderVC: UITableViewController {
     
     
     func setValueForReminder(){
-//        if(NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") == nil) {
-//            timeChosen = NSDate.defaultTime()
-//        } else {
-//            timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
-//            println("From NS: \(timeChosen)")
-//        }
-        
-        var defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        
-        if let pickerTime = defaults.objectForKey("Set Reminder") as? NSDate {
-            timeChosen = defaults.objectForKey("Set Reminder") as NSDate
-            println("Time NS: \(timeChosen)")
+        if(NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") == nil) {
+            timeChosen = NSDate.defaultTime()
+        } else {
+            timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
+            println("From NS: \(timeChosen)")
         }
-        
     }
 
         
@@ -91,7 +81,6 @@ class ReminderVC: UITableViewController {
    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Reminder Cell", forIndexPath: indexPath) as ReminderCell
-
         
         if(indexPath.row == 0){
             var dateComponets: NSDateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.HourCalendarUnit | NSCalendarUnit.MinuteCalendarUnit, fromDate: timeChosen)

@@ -31,8 +31,9 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     let dateFormter = NSDateFormatter()
     var defaultVisibleCells: [AnyObject] = []
     var scrolledCells: [AnyObject] = []
+    var scrollVisibleCells: [AnyObject] = []
     var changeBG: Bool = false
-
+    let UIScrollViewDecelerationRateFast: CGFloat = CGFloat(6)
    
     
     
@@ -52,6 +53,8 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         tableView.dataSource = self
         tableView.delegate = self
         
+        self.bgTableView.scrollEnabled = false
+        
         defaultVisibleCells = self.tableView.visibleCells() as [AnyObject]
         
         getDateData(false)
@@ -64,7 +67,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         var noteImage = UIImage(named: "\(bgImages[randomIndex])")
         return noteImage!
     }
-    
     
     
     override func viewWillAppear(animated: Bool) {
@@ -263,60 +265,64 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 //            }
 //        }
         
-        var scrollVisibleCells = self.tableView.visibleCells() as [AnyObject]
+        var topReached: Bool = false
+        var bottomReached: Bool = false
         
-        for svCells in scrollVisibleCells {
-            if (defaultVisibleCells as NSArray).containsObject(svCells as AnyObject){
-                //                println("Don't change")
-                changeBG = false
-            }else{
-                //                println("Change the BG !! ")
-                changeBG = true
-                self.bgTableView.scrollEnabled = true
+        if(scrollView.contentOffset.y == 0) {
+            topReached = true
+            bottomReached = false
+        }
+            
+        if(self.tableView.contentOffset.y >= (self.tableView.contentSize.height - self.tableView.bounds.size.height)) {
+            topReached = false
+            bottomReached = true
+        }
+        
+        if(!topReached && !bottomReached){
+            scrollVisibleCells = self.tableView.visibleCells() as [AnyObject]
+            scrolledCells = scrollVisibleCells
+            
+            for svCells in scrollVisibleCells {
+                if (defaultVisibleCells as NSArray).containsObject(svCells as AnyObject){
+                    changeBG = false
+                }else{
+                    changeBG = true
+                    self.bgTableView.scrollEnabled = true
+                    break
+                }
             }
         }
-
+        
+        if changeBG {
+            println("ChangeBG True")
+        }
     }
     
 
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath){
-//        cell.layer.shouldRasterize = isScrolling
-//        let lastRow = tableView.indexPathsForVisibleRows()?.last as NSIndexPath
-//        let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-//        bgTableView.setContentOffset(CGPointMake(0, CGFloat.max), animated: true)
-//        bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
-//        bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
-        
-//        var lastIndex = NSIndexPath(forRow: indexPath.row, inSection: 0)
-//        self.bgTableView.scrollToRowAtIndexPath(lastIndex, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
-//        if let visibleCells = bgTableView.visibleCells() as? [ImageCell]{
-//            for parallaxCell in visibleCells{
-//                var yOffset = ((bgTableView.contentOffset.y - parallaxCell.frame.origin.y)/ImageHeight) * OffsetSpeed
-//                parallaxCell.offset(CGPointMake(0,yOffset))
-//                let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-//                bgTableView.setContentOffset(CGPointMake(0, CGFloat.max), animated: true)
-//                bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
-//                bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
-//            }
-//        }
-        if changeBG {
-            UIView.animateWithDuration (1, delay: 50.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath)
+    {
+        if changeBG
+        {
+            UIView.animateWithDuration (1, delay: 500.0, options: UIViewAnimationOptions.CurveEaseInOut, animations:
+            {
                 if let visibleCells = self.bgTableView.visibleCells() as? [ImageCell]{
                     for parallaxCell in visibleCells{
                         var yOffset = ((self.bgTableView.contentOffset.y - parallaxCell.frame.origin.y)/ImageHeight) * OffsetSpeed
                         let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
                         self.bgTableView.setContentOffset(CGPointMake(0, yOffset), animated: true)
                         self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
-                        //                        self.bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
+                        self.bgTableView.decelerationRate = UIScrollViewDecelerationRateNormal
                         self.bgTableView.scrollEnabled = false
                     }
-                }
+                 }
                 },completion: {_ in
             })
+           
             changeBG = false
         }
         else{
-            //            println("ChangeBG False")
+//            println("ChangeBG False")
         }
     }
     
@@ -325,10 +331,10 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         if(tableView.tag == 100){
             let parallaxCell = tableView.dequeueReusableCellWithIdentifier("ImageCell", forIndexPath: indexPath) as ImageCell
             parallaxCell.bhImageView.image = getRandomImageFromAssets()
+            parallaxCell.bhImageView.alpha = 0.9
             return parallaxCell
         }
         else{
-            
             var cell = tableView.dequeueReusableCellWithIdentifier("MainCell") as TableViewCell
             
             let tempArr = dateArray[indexPath.section] as NSArray
@@ -361,7 +367,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             
             if isfound {
                 cell.noteLabel.text = noteData
-            }else{
+            } else {
                 cell.noteLabel.text = ""
             }
             
@@ -402,12 +408,11 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             }
             else if dateComparisionResult == NSComparisonResult.OrderedAscending {
                // Mark check for current Data in parse
-                if(parseData.count>0)
-                {
+                if(parseData.count > 0) {
                     var isfound = false
                     for (var i=0;i<parseData.count;i++) {
                         var dict: (AnyObject) = parseData[i]
-                        if ( dict["Date"] as String == d1 ){
+                        if ( dict["Date"] as String == d1) {
                             isfound = true
                             break
                         }
@@ -429,8 +434,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 }
             }
             else if dateComparisionResult == NSComparisonResult.OrderedDescending{
-                
-                // Mark check for current Data in parse
+                 // Mark check for current Data in parse
                 if(parseData.count>0)
                 {
                     var isfound = false
@@ -473,8 +477,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if(tableView.tag == 100){
             return bgImages.count
-        }
-        else{
+        }else{
             return dateArray[section].count
         }
     }
@@ -482,8 +485,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if(tableView.tag == 100){
             return 1
-        }
-        else{
+        } else{
             return monthSection.count
         }
     }
@@ -504,18 +506,15 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if(tableView.tag == 100){
             return 0
-        }
-        else{
+        } else {
             return 50
         }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        
-        if(tableView.tag == 100){
+       if(tableView.tag == 100){
             return UIScreen.mainScreen().bounds.height
-        }
-        else{
+        } else {
             return 107
         }
     }

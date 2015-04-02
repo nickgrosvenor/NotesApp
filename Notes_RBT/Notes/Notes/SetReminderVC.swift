@@ -29,7 +29,8 @@ class SetReminderVC: UIViewController {
     
     func datePickerChanged(datePicker:UIDatePicker) {
         userDateChosen = datePicker.date
-        NSUserDefaults.standardUserDefaults().setObject(userDateChosen, forKey: "Set Reminder")
+        NSUserDefaults.standardUserDefaults().setObject(datePicker.date, forKey: "Set Reminder")
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     
@@ -37,6 +38,7 @@ class SetReminderVC: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-
+ 
+    
   
 }
