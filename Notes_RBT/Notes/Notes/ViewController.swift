@@ -29,12 +29,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var currentLocation = CGFloat(0)
     let userCalendar = NSCalendar.currentCalendar()
     let dateFormter = NSDateFormatter()
-    var defaultVisibleCells: [AnyObject] = []
-    var scrolledCells: [AnyObject] = []
-    var scrollVisibleCells: [AnyObject] = []
-    var changeBG: Bool = false
-    let UIScrollViewDecelerationRateFast: CGFloat = CGFloat(6)
-   
     
     
     override func viewDidLoad() {
@@ -52,10 +46,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 
         tableView.dataSource = self
         tableView.delegate = self
-        
-        self.bgTableView.scrollEnabled = false
-        
-        defaultVisibleCells = self.tableView.visibleCells() as [AnyObject]
         
         getDateData(false)
     }
@@ -86,7 +76,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         else{
             fetchDataFromParse()
         }
-        
     }
     
     
@@ -245,92 +234,77 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
   
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-//        if let visibleCells = bgTableView.visibleCells() as? [ImageCell]{
-//            for parallaxCell in visibleCells{
-//                var yOffset = ((bgTableView.contentOffset.y - parallaxCell.frame.origin.y)/ImageHeight) * OffsetSpeed
-//                parallaxCell.offset(CGPointMake(0,yOffset))
-//                
-//                self.bgTableView.setContentOffset(CGPointMake(0, 10), animated: true)
-//                [self.tableView setContentInset:UIEdgeInsetsMake(0, 0, point.y - 60, 0)];
-//                self.bgTableView.scrollRectToVisible(CGRectMake(1, 1, 1, 1), animated: true)
-//                self.bgTableView.setContentOffset(<#contentOffset: CGPoint#>, animated: <#Bool#>)
-                
-//                   self.sentences.append( LoremIpsum.sentence())
-//                    self.main_table.reloadData()
-//                    
-//                    self.bgTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.bgImages.count-1 , inSection: 0), atScrollPosition: .Bottom, animated: true)
-                
-
-//                println("BG Scrolling")
-//            }
+//        if(scrollView.contentOffset.y == 0) {
+//            topReached = true
+//            bottomReached = false
 //        }
-        
-        var topReached: Bool = false
-        var bottomReached: Bool = false
-        
-        if(scrollView.contentOffset.y == 0) {
-            topReached = true
-            bottomReached = false
-        }
-            
-        if(self.tableView.contentOffset.y >= (self.tableView.contentSize.height - self.tableView.bounds.size.height)) {
-            topReached = false
-            bottomReached = true
-        }
-        
-        if(!topReached && !bottomReached){
-            scrollVisibleCells = self.tableView.visibleCells() as [AnyObject]
-            scrolledCells = scrollVisibleCells
-            
-            for svCells in scrollVisibleCells {
-                if (defaultVisibleCells as NSArray).containsObject(svCells as AnyObject){
-                    changeBG = false
-                }else{
-                    changeBG = true
-                    self.bgTableView.scrollEnabled = true
-                    break
-                }
-            }
-        }
-        
-        if changeBG {
-            println("ChangeBG True")
-        }
-    }
-    
+//            
+//        if(self.tableView.contentOffset.y >= (self.tableView.contentSize.height - self.tableView.bounds.size.height)) {
+//            topReached = false
+//            bottomReached = true
+//        }
+//        else{
+//            topReached = false
+//            bottomReached = false
+//        }
+//        println("Count: \(self.tableView.visibleCells().count)")
 
+    }
+   
 
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath)
     {
-        if changeBG
-        {
-            UIView.animateWithDuration (1, delay: 500.0, options: UIViewAnimationOptions.CurveEaseInOut, animations:
+        if indexPath.row % 5 == 0{
+            UIView.animateWithDuration (1, delay: 100.0, options: UIViewAnimationOptions.CurveEaseInOut, animations:
             {
-                if let visibleCells = self.bgTableView.visibleCells() as? [ImageCell]{
-                    for parallaxCell in visibleCells{
-                        var yOffset = ((self.bgTableView.contentOffset.y - parallaxCell.frame.origin.y)/ImageHeight) * OffsetSpeed
-                        let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-                        self.bgTableView.setContentOffset(CGPointMake(0, yOffset), animated: true)
-                        self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
-                        self.bgTableView.decelerationRate = UIScrollViewDecelerationRateNormal
-                        self.bgTableView.scrollEnabled = false
-                    }
-                 }
-                },completion: {_ in
-            })
-           
-            changeBG = false
-        }
-        else{
-//            println("ChangeBG False")
+                let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+                self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                self.bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
+            },
+            completion: {_ in })
+//            changeBG = false
         }
     }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+//        changeBG = false
+    }
+    
+    
+    /*
+    func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
+        currentLocation = scrollView.contentOffset.y
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    
+        var currentLocation1 = scrollView.contentOffset.y
+        
+        if currentLocation1 < currentLocation{
+        visibleBGCells--
+        if(visibleBGCells <= 0){
+        visibleBGCells = 0
+        }
+    
+    }else if currentLocation1 > currentLocation{
+    visibleBGCells++
+    if(visibleBGCells >= bgImages.count-1){
+    visibleBGCells = 0
+    }
+    }
+    
+    let indexPath = NSIndexPath(forRow: visibleBGCells, inSection: 0)
+    self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+    }
+    */
+    
     
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if(tableView.tag == 100){
             let parallaxCell = tableView.dequeueReusableCellWithIdentifier("ImageCell", forIndexPath: indexPath) as ImageCell
-            parallaxCell.bhImageView.image = getRandomImageFromAssets()
+            var bgImage: UIImage = getRandomImageFromAssets()
+            parallaxCell.bhImageView.image = bgImage
             parallaxCell.bhImageView.alpha = 0.9
             return parallaxCell
         }
@@ -518,34 +492,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             return 107
         }
     }
-    
-  /*
-    func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
-        currentLocation = scrollView.contentOffset.y
-    }
-    
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        
-        var currentLocation1 = scrollView.contentOffset.y
-        
-        if currentLocation1 < currentLocation{
-           visibleBGCells--
-            if(visibleBGCells <= 0){
-                visibleBGCells = 0
-            }
-            
-        }else if currentLocation1 > currentLocation{
-            visibleBGCells++
-            if(visibleBGCells >= bgImages.count-1){
-                visibleBGCells = 0
-            }
-        }
-        
-        let indexPath = NSIndexPath(forRow: visibleBGCells, inSection: 0)
-        self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
-    }
- */
-    
+  
 
     // Method to get WeekDay Name
     func getDayOfWeek(today: Int) -> String {
@@ -638,6 +585,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func fetchDataFromParse(){
         self.parseData.removeAll()
+        
         JHProgressHUD.sharedHUD.showInView(UIApplication.sharedApplication().keyWindow!, withHeader: "Loading", andFooter: "")
         
         var userImageFile : PFFile = PFFile()
@@ -651,7 +599,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     for object in objects {
                         if var imageObj = object["ImageFileData"] as? PFFile{
-                            userImageFile = imageObj as PFFile
+                             userImageFile = imageObj as PFFile
                         }
                         
                         var userNote = object["Note"] as String
@@ -661,7 +609,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                         
                         userImageFile.getDataInBackgroundWithBlock {(imageData: NSData!, error: NSError!) -> Void in
                             if error == nil {
-                                
                                 if(imageData == nil){
                                     if var uploadImage = imageData as NSData! {
                                         var image = UIImage(data: uploadImage)
@@ -672,10 +619,12 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                             }
                         }
                     }
-                    
+                   
                     self.tableView.reloadData()
                     
                     JHProgressHUD.sharedHUD.hide()
+//                    println("2: \(self.bgImages.count)")
+
                     let indexPath = NSIndexPath(forRow:self.indexValue, inSection: self.sectionValue)
                     self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
                 })

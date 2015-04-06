@@ -197,10 +197,6 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         }
         
         if(bgImage != nil){
-//            var imageData = UIImagePNGRepresentation(bgImage)
-//            var imageFile = PFFile(name:"Image.png", data:imageData)
-//            testObject["ImageFileData"] = imageFile
-            
             imageFile.saveInBackgroundWithBlock {(success: Bool, error: NSError!) -> Void in
                 if (success) {
                     testObject.saveInBackgroundWithBlock {(success: Bool, error: NSError!) -> Void in
@@ -362,11 +358,9 @@ class AddNoteVC: UIViewController, UIScrollViewAccessibilityDelegate, UIImagePic
         if(imageView.image == nil){
             textView.textColor = UIColor.blackColor()
             placeholderLabel.textColor = UIColor.blackColor()
-            println("When nil: \(imageView.image)")
         }else{
             textView.textColor = UIColor.whiteColor()
             placeholderLabel.textColor = UIColor.whiteColor()
-            println("With image: \(imageView.image)")
         }
     }
     

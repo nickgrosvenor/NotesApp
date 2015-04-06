@@ -24,11 +24,19 @@ class ReminderVC: UITableViewController {
     var parameters = ["Time", "Frequency"]
     var rightbarBtn = UIBarButtonItem()
     var timeChosen = NSDate()
+    lazy var setRemVC = SetReminderVC()
+    
+    var timeRemBool: Bool = false
+    
+    @IBOutlet var myTableView: UITableView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        tableView.delegate = self
+        tableView.dataSource = self
+        
         self.navigationItem.title = "Reminders"
         self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController?.navigationBar.barTintColor = UIColor.blackColor()
@@ -38,19 +46,42 @@ class ReminderVC: UITableViewController {
        
 //        if(NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") == nil){
 //            timeChosen = NSDate.defaultTime()
-//            println("My Time: \(timeChosen)")
-//        }else{
+//            println("Default Time: \(timeChosen)")
+//        }
+//        else{
 //            timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
 //            println("My Time: \(timeChosen)")
 //        }
         
         setValueForReminder()
+        
+//        timeRemBool = true
     }
    
     
     override func viewWillAppear(animated: Bool) {
         let titleDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         self.navigationController?.navigationBar.titleTextAttributes = titleDict
+        
+//        setValueForReminder()
+    }
+    
+    
+    override func viewDidAppear(animated: Bool){
+//        let formatter = NSDateFormatter()
+//        formatter.timeStyle = NSDateFormatterStyle.ShortStyle
+//        
+//        timeChosen = setRemVC.userDateChosen
+//        var cell = tableView.dequeueReusableCellWithIdentifier("Reminder Cell") as ReminderCell
+////        var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
+//        var indexPath = NSIndexPath(index: 0)// indexPathForRow:0, inSection:0)
+//
+//        if  indexPath == 0 && timeRemBool { //(indexPaths.first != nil) {
+//            cell.reminderValue?.text = formatter.stringFromDate(timeChosen)
+//        }
+//        
+//        println("Appeared")
+        
     }
     
     
@@ -59,8 +90,14 @@ class ReminderVC: UITableViewController {
             timeChosen = NSDate.defaultTime()
         } else {
             timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
-            println("From NS: \(timeChosen)")
+//            timeChosen = setRemVC.userDateChosen
+            println("Time Changed: \(timeChosen)")
         }
+    }
+    
+    
+    func saveTimeForReminder(){
+        timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
     }
 
         
@@ -83,9 +120,9 @@ class ReminderVC: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("Reminder Cell", forIndexPath: indexPath) as ReminderCell
         
         if(indexPath.row == 0){
-            var dateComponets: NSDateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.HourCalendarUnit | NSCalendarUnit.MinuteCalendarUnit, fromDate: timeChosen)
-            dateComponets.second = 0
-            var selectedDate: NSDate! = NSCalendar.currentCalendar().dateFromComponents(dateComponets)
+//            var dateComponets: NSDateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.HourCalendarUnit | NSCalendarUnit.MinuteCalendarUnit, fromDate: timeChosen)
+//            dateComponets.second = 0
+//            var selectedDate: NSDate! = NSCalendar.currentCalendar().dateFromComponents(dateComponets)
             
             let formatter = NSDateFormatter()
             formatter.timeStyle = NSDateFormatterStyle.ShortStyle
@@ -102,6 +139,8 @@ class ReminderVC: UITableViewController {
     
     @IBAction func AddReminderButtonPressed(sender: AnyObject) {
         scheduleLocalNotification()
+        saveTimeForReminder()
+        
         var alert = UIAlertController(title: nil, message: "Reminder Added !!", preferredStyle: UIAlertControllerStyle.Alert)
         
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action: UIAlertAction!) in

@@ -167,12 +167,15 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         noteText.textColor = UIColor.blackColor()
         noteText.textAlignment = NSTextAlignment.Center
         noteText.backgroundColor = UIColor.clearColor()
+        noteText.editable = false
         noteText.scrollEnabled = true
         noteText.font = UIFont(name: "HelveticaNeue-Light", size: 19)
         
-        let closeButton   = UIButton.buttonWithType(UIButtonType.System) as UIButton
-        closeButton.frame = CGRectMake(UIScreen.mainScreen().bounds.width - 160, 0, 100, 50)
-        closeButton.setTitle("Close Button", forState: UIControlState.Normal)
+        let crossImage = UIImage(named: "Cross") as UIImage?
+        let closeButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        closeButton.frame = CGRectMake(UIScreen.mainScreen().bounds.width - 100, 0, 40, 40)
+        closeButton.backgroundColor = UIColor.clearColor()
+        closeButton.setBackgroundImage(crossImage, forState: UIControlState.Normal)
         closeButton.addTarget(self, action: "closeButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         popUpView.addSubview(noteText)
@@ -432,6 +435,9 @@ class ShowNotesVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             cell.noteLbl.text = ""
         }
 
+//            var numLines = cell.noteLbl.contentSize.height / cell.noteLbl.font.lineHeight
+//            println("Count lines: \(numLines)")
+    
         
         if cell.noteLbl.text != "" {
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "showPopupWithText")
