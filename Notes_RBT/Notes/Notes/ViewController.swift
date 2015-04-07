@@ -8,6 +8,44 @@
 
 import UIKit
 
+//extension UIView {
+//    func slideInFromTop(duration: NSTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
+//        let slideInFromTopTransition = CATransition()
+//        
+//        if let delegate: AnyObject = completionDelegate {
+//            slideInFromTopTransition.delegate = delegate
+//        }
+//        
+//        slideInFromTopTransition.type = kCATransitionPush
+//        slideInFromTopTransition.subtype = kCATransitionFromTop //kCATransitionFromLeft
+//        slideInFromTopTransition.duration = duration
+//        slideInFromTopTransition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+//        slideInFromTopTransition.fillMode = kCAFillModeRemoved
+//        
+//        // Add the animation to the View's layer
+//        self.layer.addAnimation(slideInFromTopTransition, forKey: "slideInFromTopTransition")
+//    }
+
+//    func slideInFromBottom(duration: NSTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
+//        let slideInFromBottomTransition = CATransition()
+//        
+//        if let delegate: AnyObject = completionDelegate {
+//            slideInFromBottomTransition.delegate = delegate
+//        }
+//        
+//        slideInFromBottomTransition.type = kCATransitionPush
+//        slideInFromBottomTransition.subtype = kCATransitionFromBottom  //kCATransitionFromLeft
+//        slideInFromBottomTransition.duration = duration
+//        slideInFromBottomTransition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+//        slideInFromBottomTransition.fillMode = kCAFillModeRemoved
+//        
+//        // Add the animation to the View's layer
+//        self.layer.addAnimation(slideInFromBottomTransition, forKey: "slideInFromBottomTransition")
+//    }
+//}
+
+
+
 class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate  {
     
     @IBOutlet weak var tableView: UITableView!
@@ -29,6 +67,10 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var currentLocation = CGFloat(0)
     let userCalendar = NSCalendar.currentCalendar()
     let dateFormter = NSDateFormatter()
+    var lastContentOffset: CGPoint = CGPoint.zeroPoint
+    var bgImg = UIImage()
+    var bgChange = false
+    var scrollUp = false
     
     
     override func viewDidLoad() {
@@ -47,7 +89,13 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         tableView.dataSource = self
         tableView.delegate = self
         
+//        bgTableView.scrollEnabled = false
+        
         getDateData(false)
+        
+//        var imageCell = bgTableView.dequeueReusableCellWithIdentifier("ImageCell") as ImageCell
+//        imageCell.bhImageView.image = getRandomImageFromAssets()
+//        bgImg = getRandomImageFromAssets()
     }
     
     
@@ -118,7 +166,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController!) {
         println("User dismissed signup")
     }
-    
+   
     
     func isYearLeapYear(year:Int)->Bool{
         return (( year%100 != 0) && (year%4 == 0)) || year%400 == 0
@@ -250,61 +298,138 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
 //        println("Count: \(self.tableView.visibleCells().count)")
 
     }
-   
+    
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView){
+        lastContentOffset.x = scrollView.contentOffset.x;
+        lastContentOffset.y = scrollView.contentOffset.y;
+    }
+    
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView){
+        if (lastContentOffset.y < scrollView.contentOffset.y){
+            println("UP")
+            scrollUp = true
+       }
+       if (lastContentOffset.y > scrollView.contentOffset.y){
+            println("Down")
+            scrollUp = false
+       }
+    }
+    
 
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath)
     {
-        if indexPath.row % 5 == 0{
-            UIView.animateWithDuration (1, delay: 100.0, options: UIViewAnimationOptions.CurveEaseInOut, animations:
-            {
-                let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-                self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
-                self.bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
-            },
-            completion: {_ in })
-//            changeBG = false
+//        if(tableView.tag != 100){
+        if isViewLoaded(){
+            if indexPath.row % 5 == 0{
+                UIView.animateWithDuration (1, delay: 500.0, options: UIViewAnimationOptions.CurveEaseInOut, animations:
+                {
+                    let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+                    self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
+                    self.bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
+                },
+                completion: {_ in })
+                
+//                println("Displayed Cell: \(self.tableView.visibleCells().count)")
+
+                if (tableView.visibleCells().last != nil) {
+                    bgTableView.scrollEnabled = true
+                    bgChange = true
+                }
+
+                
+//                UIView.transitionWithView(self.imageView,
+//                    duration:5,
+//                    options: UIViewAnimationOptions.TransitionCrossDissolve,
+//                    animations: { self.imageView.image = toImage },
+//                    completion: nil)
+                
+ 
+//               var imageCell = bgTableView.dequeueReusableCellWithIdentifier("ImageCell") as ImageCell
+//               imageCell.bhImageView.image = getRandomImageFromAssets()
+//                UIView.transitionWithView(self.bgTableView,
+//                    duration: 0.8,
+//                    options: UIViewAnimationOptions.TransitionCurlUp,
+//                    animations: {
+//                          imageCell.bhImageView.image = self.getRandomImageFromAssets()
+////                        self.bgImg = self.getRandomImageFromAssets()
+//                }, completion: nil)
+                
+//                self.bgImg = self.getRandomImageFromAssets()
+//                var imgView = UIImageView(image: getRandomImageFromAssets())
+//                UIView.transitionFromView(imageCell.bhImageView, toView:imgView,
+//                    duration:1,
+//                    options: UIViewAnimationOptions.TransitionFlipFromRight,
+//                    completion: nil)
+
+                
+//                if scrollUp {
+//                    slideInFromTop()
+//                } else {
+////                if !scrollUp {
+//                    slideInFromBottom()
+//                }
+
+            }
         }
-    }
-    
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-//        changeBG = false
-    }
-    
-    
-    /*
-    func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
-        currentLocation = scrollView.contentOffset.y
-    }
-    
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-    
-        var currentLocation1 = scrollView.contentOffset.y
         
-        if currentLocation1 < currentLocation{
-        visibleBGCells--
-        if(visibleBGCells <= 0){
-        visibleBGCells = 0
+        else{
+            if bgChange {
+                bgChange = false
+                bgImg = getRandomImageFromAssets()
+                sleep(1)
+                bgTableView.scrollEnabled = false
+            }
         }
-    
-    }else if currentLocation1 > currentLocation{
-    visibleBGCells++
-    if(visibleBGCells >= bgImages.count-1){
-    visibleBGCells = 0
-    }
     }
     
-    let indexPath = NSIndexPath(forRow: visibleBGCells, inSection: 0)
-    self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+/*
+    func slideInFromBottom(duration: NSTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
+        let slideInFromBottomTransition = CATransition()
+        
+        if let delegate: AnyObject = completionDelegate {
+            slideInFromBottomTransition.delegate = delegate
+        }
+        
+        slideInFromBottomTransition.type = kCATransitionPush
+        slideInFromBottomTransition.subtype = kCATransitionFromBottom  //kCATransitionFromLeft
+        slideInFromBottomTransition.duration = duration
+        slideInFromBottomTransition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        slideInFromBottomTransition.fillMode = kCAFillModeRemoved
+        
+//        var imageCell = bgTableView.dequeueReusableCellWithIdentifier("ImageCell") as ImageCell
+//        imageCell.bhImageView.image = getRandomImageFromAssets()
+        
+        // Add the animation to the View's layer
+        self.view.layer.addAnimation(slideInFromBottomTransition, forKey: "slideInFromBottomTransition")
     }
-    */
     
     
+    func slideInFromTop(duration: NSTimeInterval = 1.0, completionDelegate: AnyObject? = nil) {
+        let slideInFromTopTransition = CATransition()
+        
+        if let delegate: AnyObject = completionDelegate {
+            slideInFromTopTransition.delegate = delegate
+        }
+        
+        slideInFromTopTransition.type = kCATransitionPush
+        slideInFromTopTransition.subtype = kCATransitionFromTop //kCATransitionFromLeft
+        slideInFromTopTransition.duration = duration
+        slideInFromTopTransition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        slideInFromTopTransition.fillMode = kCAFillModeRemoved
+        
+        // Add the animation to the View's layer
+        self.view.layer.addAnimation(slideInFromTopTransition, forKey: "slideInFromTopTransition")
+    }
+
+
+ */
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if(tableView.tag == 100){
             let parallaxCell = tableView.dequeueReusableCellWithIdentifier("ImageCell", forIndexPath: indexPath) as ImageCell
-            var bgImage: UIImage = getRandomImageFromAssets()
-            parallaxCell.bhImageView.image = bgImage
+            parallaxCell.bhImageView.image = getRandomImageFromAssets()
             parallaxCell.bhImageView.alpha = 0.9
             return parallaxCell
         }
@@ -357,6 +482,34 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             return cell
         }
     }
+    
+    
+    /*
+    func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
+    currentLocation = scrollView.contentOffset.y
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    
+    var currentLocation1 = scrollView.contentOffset.y
+    
+    if currentLocation1 < currentLocation{
+    visibleBGCells--
+    if(visibleBGCells <= 0){
+    visibleBGCells = 0
+    }
+    
+    }else if currentLocation1 > currentLocation{
+    visibleBGCells++
+    if(visibleBGCells >= bgImages.count-1){
+    visibleBGCells = 0
+    }
+    }
+    
+    let indexPath = NSIndexPath(forRow: visibleBGCells, inSection: 0)
+    self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+    }
+    */
     
     
     

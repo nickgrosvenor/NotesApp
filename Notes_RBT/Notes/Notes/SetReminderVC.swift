@@ -10,9 +10,12 @@ import UIKit
 
 class SetReminderVC: UIViewController {
 
+    var dateChosen = NSDate()
+    var delegate: UIViewController?
+    
     @IBOutlet var reminderDatePicker: UIDatePicker!
    
-    internal var userDateChosen = NSDate()
+//    internal var userDateChosen = NSDate()
     
     
     override func viewDidLoad() {
@@ -32,11 +35,17 @@ class SetReminderVC: UIViewController {
     
     
     func datePickerChanged(datePicker:UIDatePicker) {
-        userDateChosen = datePicker.date
-        println("Date: \(userDateChosen)")
-        NSUserDefaults.standardUserDefaults().setObject(datePicker.date, forKey: "Set Reminder")
-        NSUserDefaults.standardUserDefaults().synchronize()
+        dateChosen = datePicker.date
+        setDate()
     }
+    
+    
+    func setDate(){
+        if delegate != nil{
+            (delegate as ReminderVC).setTimeChosen(dateChosen)
+        }
+    }
+
     
     
     
