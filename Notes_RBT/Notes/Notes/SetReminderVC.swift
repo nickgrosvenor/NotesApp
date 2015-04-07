@@ -14,9 +14,7 @@ class SetReminderVC: UIViewController {
     var delegate: UIViewController?
     
     @IBOutlet var reminderDatePicker: UIDatePicker!
-   
-//    internal var userDateChosen = NSDate()
-    
+       
     
     override func viewDidLoad() {
         super.viewDidLoad()

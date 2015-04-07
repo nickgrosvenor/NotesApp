@@ -43,15 +43,6 @@ class ReminderVC: UITableViewController {
         
         rightbarBtn = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: "EditReminder")
         navigationItem.rightBarButtonItems = [rightbarBtn]
-       
-//        if(NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") == nil){
-//            timeChosen = NSDate.defaultTime()
-//            println("Default Time: \(timeChosen)")
-//        }
-//        else{
-//            timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
-//            println("My Time: \(timeChosen)")
-//        }
         
         setValueForReminder()
     }
@@ -151,8 +142,6 @@ class ReminderVC: UITableViewController {
         return fixedDate
     }
     
-//    var vc = SetReminderVC()
-
     func EditReminder(){
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("SetReminderVC") as SetReminderVC
         vc.dateChosen = timeChosen
