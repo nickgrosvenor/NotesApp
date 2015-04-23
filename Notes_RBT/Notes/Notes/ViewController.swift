@@ -13,6 +13,12 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bgTableView: UITableView!
     
+    var startIndex = NSIndexPath(forRow: 0, inSection: 0)
+    var nextIndex = NSIndexPath(forRow: 0, inSection: 0)
+    
+    @IBOutlet weak var bgimage: UIImageView!
+    
+    @IBOutlet weak var bgImageSecond: UIImageView!
     var dateArray = [AnyObject]()
     var monthSection = [Int]()
     var isLoading = false
@@ -29,21 +35,48 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var currentLocation = CGFloat(0)
     let userCalendar = NSCalendar.currentCalendar()
     let dateFormter = NSDateFormatter()
+   
+    var oldSize = CGSizeMake(UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height)
     
+//    var newSize = CGSizeMake(UIScreen.mainScreen().bounds.size.width, UIScreen.mainScreen().bounds.size.height + UIScreen.mainScreen().bounds.size.height)
+    
+    var firstImage = UIImage()
+    var nextImage = UIImage()
+    var finalImage = UIImage()
+    
+    var imageIndex = 0
+    
+    var start = false
+    var y = CGFloat(0)
+    var fullScroll = false
+    var scrollable = true
+    var image1 = true
+    var divisor = 4
+    
+//    #define DEVICE_SIZE UIScreen.mainScreen()..size
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // get Date Data
         self.navigationItem.title = "Timeline"
         let logo = UIImage(named: "uploadistLogo")
         let imageView = UIImageView(image:logo)
         self.navigationItem.titleView = imageView
-      
-        bgTableView.dataSource = self
-        bgTableView.delegate = self
+        
         self.automaticallyAdjustsScrollViewInsets = false;
+        
+        self.bgimage.frame = CGRectMake(0.0, 0.0, self.bgimage.frame.size.width, self.bgimage.frame.size.height)
+        self.bgimage.contentMode = UIViewContentMode.ScaleAspectFit
+        self.bgimage.image = self.getRandomImageFromAssets()
+        
+        
+        self.bgImageSecond.frame = CGRectMake(0.0, self.oldSize.height, self.oldSize.width, self.oldSize.height)
+        self.bgImageSecond.contentMode = UIViewContentMode.ScaleAspectFit
+        self.bgImageSecond.image = self.getRandomImageFromAssets()
+        
 
+        println("How parallax is working")
+        
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -51,12 +84,76 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        println("FullScroll: \(self.fullScroll) Scrollable \(self.scrollable)")
+        
+        if(!start){//called only once when system based scrolling is done
+            println("scrollViewDidScroll - Start")
+            start = !start
+        }else{
+            if(scrollable){
+                if(fullScroll){
+                    scrollable = false
+                    UIView.animateWithDuration(1, delay: 0,
+                        options: UIViewAnimationOptions.CurveEaseOut,
+                        animations: {
+                            if(self.image1){
+                                self.bgimage.frame = CGRectMake(0, -self.oldSize.height,self.bgimage.frame.size.width, self.bgimage.frame.size.height)
+                                self.bgImageSecond.frame = CGRectMake(0, 0,self.bgImageSecond.frame.size.width, self.bgImageSecond.frame.size.height)
+                            }else{
+                                self.bgimage.frame = CGRectMake(0, 0,self.bgimage.frame.size.width, self.bgimage.frame.size.height)
+                                self.bgImageSecond.frame = CGRectMake(0, -self.oldSize.height,self.bgImageSecond.frame.size.width, self.bgImageSecond.frame.size.height)
+                            }
+                        }, completion: { finished in
+                            
+                            if(self.image1){
+                                self.bgimage.image = self.getRandomImageFromAssets()
+                            }else{
+                                self.bgImageSecond.image = self.getRandomImageFromAssets()
+                            }
+                            self.y = 0
+                            self.image1 = !self.image1
+                            println("1. FullScroll: \(self.fullScroll) 2. Scrollable \(self.scrollable)")
+                    })
+                }else{
+                    if(image1){
+                        bgimage.frame = CGRectMake(0, --y,bgimage.frame.size.width, bgimage.frame.size.height)
+                        bgImageSecond.frame = CGRectMake(0, (oldSize.height + y),bgImageSecond.frame.size.width, bgImageSecond.frame.size.height)
+                    }else{
+                        bgimage.frame = CGRectMake(0, (oldSize.height + y),bgimage.frame.size.width, bgimage.frame.size.height)
+                        bgImageSecond.frame = CGRectMake(0, --y,bgImageSecond.frame.size.width, bgImageSecond.frame.size.height)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        println("ScrollViewDidEndDecelerating")
+        fullScroll = false
+        scrollable = true
+    }
+    
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath)
+    {
+        if(indexPath.row % divisor == 0 && start && !fullScroll){
+            
+            fullScroll = true
+        }
+        
+    }
+    
     
     func getRandomImageFromAssets() -> UIImage{
         var randomIndex = Int(arc4random_uniform(UInt32(bgImages.count)))
         var noteImage = UIImage(named: "\(bgImages[randomIndex])")
         return noteImage!
     }
+    
+    
     
     
     override func viewWillAppear(animated: Bool) {
@@ -232,83 +329,68 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: false)
     }
   
-    
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-//        if(scrollView.contentOffset.y == 0) {
-//            topReached = true
-//            bottomReached = false
-//        }
-//            
-//        if(self.tableView.contentOffset.y >= (self.tableView.contentSize.height - self.tableView.bounds.size.height)) {
-//            topReached = false
-//            bottomReached = true
-//        }
-//        else{
-//            topReached = false
-//            bottomReached = false
-//        }
-//        println("Count: \(self.tableView.visibleCells().count)")
-
-    }
-   
-
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath)
-    {
-        if indexPath.row % 5 == 0{
-            UIView.animateWithDuration (1, delay: 100.0, options: UIViewAnimationOptions.CurveEaseInOut, animations:
-            {
-                let indexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-                self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
-                self.bgTableView.decelerationRate = UIScrollViewDecelerationRateFast
-            },
-            completion: {_ in })
-//            changeBG = false
-        }
+    func maxOffsetForScrollView(scrollView: UIScrollView) -> CGFloat{
+        
+        var  contentWidth = scrollView.contentSize.height as CGFloat
+        var  frameWidth = CGRectGetWidth(scrollView.frame) as CGFloat
+        
+        return contentWidth - frameWidth
+        
+        
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-//        changeBG = false
-    }
+    
+    
+    
     
     
     /*
     func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
         currentLocation = scrollView.contentOffset.y
-    }
+    }*/
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+//    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+//        for (UICollectionViewCell *cell in [self.mainImageCollection visibleCells]) {
+//            NSIndexPath *indexPath = [self.mainImageCollection indexPathForCell:cell];
+//            NSLog(@"%@",indexPath);
+//        }
+//    }
     
-        var currentLocation1 = scrollView.contentOffset.y
-        
-        if currentLocation1 < currentLocation{
-        visibleBGCells--
-        if(visibleBGCells <= 0){
-        visibleBGCells = 0
-        }
-    
-    }else if currentLocation1 > currentLocation{
-    visibleBGCells++
-    if(visibleBGCells >= bgImages.count-1){
-    visibleBGCells = 0
-    }
-    }
-    
-    let indexPath = NSIndexPath(forRow: visibleBGCells, inSection: 0)
-    self.bgTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
-    }
-    */
     
     
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if(tableView.tag == 100){
-            let parallaxCell = tableView.dequeueReusableCellWithIdentifier("ImageCell", forIndexPath: indexPath) as ImageCell
-            var bgImage: UIImage = getRandomImageFromAssets()
-            parallaxCell.bhImageView.image = bgImage
-            parallaxCell.bhImageView.alpha = 0.9
-            return parallaxCell
-        }
-        else{
+//        if(tableView.tag == 100){
+//            println("cellForRowAtIndexPath")
+//            
+//            
+//            println(self.bgTableView.numberOfRowsInSection(0))
+//            
+//            if var imageView = self.bgTableView.cellForRowAtIndexPath(startIndex) as? TableViewCell
+//            {
+//                imageView.imageView?.image = getRandomImageFromAssets();
+//            }
+//            
+//            nextIndex =  NSIndexPath(forRow: (startIndex.row + 1) , inSection: startIndex.section)
+//            
+//            if var imageView2 = self.bgTableView.cellForRowAtIndexPath(nextIndex) as? TableViewCell
+//            {
+//                imageView2.imageView?.image = getRandomImageFromAssets();
+//            }
+//
+//            
+//            let parallaxCell = tableView.dequeueReusableCellWithIdentifier("ImageCell", forIndexPath: startIndex) as TableViewCell
+////            var bgImage: UIImage = getRandomImageFromAssets()
+////                parallaxCell.imageView!.conte image.size
+////            parallaxCell.imageView?.alpha = 0.9
+////            
+//            
+//            
+//            return parallaxCell
+//        }
+//        else{
+            //println("adding rows")
+            
             var cell = tableView.dequeueReusableCellWithIdentifier("MainCell") as TableViewCell
             
             let tempArr = dateArray[indexPath.section] as NSArray
@@ -355,18 +437,19 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
             
             cell.backgroundColor = UIColor.clearColor()
             return cell
-        }
+        //}
     }
     
     
     
     // Table View Delegate & DataSource Method
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if(tableView.tag == 100){
-            
-        }
-        else{
-            
+//        if(tableView.tag == 100){
+//            
+//            
+//        }
+//        else{
+        
             let tempArr = dateArray[indexPath.section] as NSArray
             let selectedDate = tempArr[indexPath.row] as NSDate
             
@@ -433,7 +516,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     alert.show()
                 }
             }
-        }
+//        }
     } // end of Method
     
     
@@ -449,19 +532,19 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(tableView.tag == 100){
-            return bgImages.count
-        }else{
+//        if(tableView.tag == 100){
+//            return 2
+//        }else{
             return dateArray[section].count
-        }
+//        }
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if(tableView.tag == 100){
-            return 1
-        } else{
+//        if(tableView.tag == 100){
+//            return 1
+//        } else{
             return monthSection.count
-        }
+//        }
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -478,19 +561,19 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if(tableView.tag == 100){
-            return 0
-        } else {
+//        if(tableView.tag == 100){
+//            return 0
+//        } else {
             return 50
-        }
+//        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-       if(tableView.tag == 100){
-            return UIScreen.mainScreen().bounds.height
-        } else {
+//       if(tableView.tag == 100){
+//            return UIScreen.mainScreen().bounds.height
+//        } else {
             return 107
-        }
+//        }
     }
   
 
@@ -584,6 +667,7 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     
     func fetchDataFromParse(){
+        return
         self.parseData.removeAll()
         
         JHProgressHUD.sharedHUD.showInView(UIApplication.sharedApplication().keyWindow!, withHeader: "Loading", andFooter: "")

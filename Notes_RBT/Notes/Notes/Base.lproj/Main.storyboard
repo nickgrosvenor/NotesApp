@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="8v5-tE-tkz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="8v5-tE-tkz">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -49,7 +49,7 @@
                                                 <constraint firstAttribute="width" constant="92" id="r6j-8v-B14"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -431,38 +431,16 @@
                         <viewControllerLayoutGuide type="top" id="RuL-cB-FEZ"/>
                         <viewControllerLayoutGuide type="bottom" id="yvx-gC-elF"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="a46-ZV-wU4">
+                    <view key="view" contentMode="scaleAspectFill" id="a46-ZV-wU4">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" userInteractionEnabled="NO" tag="100" contentMode="scaleToFill" restorationIdentifier="Parallax TableView" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="PNG-BR-HB6">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ImageCell" rowHeight="600" id="acA-9Z-qAW" customClass="ImageCell" customModule="Notes" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="acA-9Z-qAW" id="NKN-Mx-ZXR">
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MrR-aQ-hFh">
-                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                                </imageView>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <constraints>
-                                                <constraint firstItem="MrR-aQ-hFh" firstAttribute="leading" secondItem="NKN-Mx-ZXR" secondAttribute="leadingMargin" constant="-8" id="6jj-M9-dhr"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="MrR-aQ-hFh" secondAttribute="trailing" constant="-8" id="HQs-tA-94R"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="MrR-aQ-hFh" secondAttribute="bottom" constant="-8" id="NNJ-Jv-ZXY"/>
-                                                <constraint firstItem="MrR-aQ-hFh" firstAttribute="top" secondItem="NKN-Mx-ZXR" secondAttribute="topMargin" constant="-8" id="RN8-Mk-XpD"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="bhImageView" destination="MrR-aQ-hFh" id="Lvd-xQ-hca"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
+                            <imageView autoresizesSubviews="NO" userInteractionEnabled="NO" alpha="0.90000000000000002" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MrR-aQ-hFh">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                            <imageView autoresizesSubviews="NO" userInteractionEnabled="NO" alpha="0.90000000000000002" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pvw-4g-MWE">
+                                <rect key="frame" x="0.0" y="667" width="375" height="667"/>
+                            </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="86" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="cVo-4P-ev9">
                                 <rect key="frame" x="0.0" y="64" width="600" height="575"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -523,14 +501,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="cVo-4P-ev9" firstAttribute="top" secondItem="RuL-cB-FEZ" secondAttribute="bottom" id="B9P-so-OFV"/>
-                            <constraint firstItem="yvx-gC-elF" firstAttribute="top" secondItem="PNG-BR-HB6" secondAttribute="bottom" id="MRZ-p7-gya"/>
-                            <constraint firstItem="yvx-gC-elF" firstAttribute="top" secondItem="cVo-4P-ev9" secondAttribute="bottom" constant="-39" id="O2R-6O-Q4q"/>
                             <constraint firstItem="cVo-4P-ev9" firstAttribute="leading" secondItem="a46-ZV-wU4" secondAttribute="leadingMargin" constant="-16" id="P6p-62-02h"/>
-                            <constraint firstItem="PNG-BR-HB6" firstAttribute="leading" secondItem="a46-ZV-wU4" secondAttribute="leadingMargin" constant="-16" id="WLg-j0-LxN"/>
                             <constraint firstAttribute="trailingMargin" secondItem="cVo-4P-ev9" secondAttribute="trailing" constant="-16" id="Zik-5o-AMy"/>
-                            <constraint firstItem="PNG-BR-HB6" firstAttribute="top" secondItem="RuL-cB-FEZ" secondAttribute="bottom" constant="-64" id="dnJ-iv-OGU"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="PNG-BR-HB6" secondAttribute="trailing" constant="-16" id="s7z-9d-aMK"/>
+                            <constraint firstItem="yvx-gC-elF" firstAttribute="top" secondItem="cVo-4P-ev9" secondAttribute="bottom" constant="-39" id="eFv-o7-shM"/>
+                            <constraint firstItem="cVo-4P-ev9" firstAttribute="top" secondItem="RuL-cB-FEZ" secondAttribute="bottom" id="hfc-Nf-UKM"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="57I-8x-Nul">
@@ -546,7 +520,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="bgTableView" destination="PNG-BR-HB6" id="KC0-ew-AIi"/>
+                        <outlet property="bgImageSecond" destination="Pvw-4g-MWE" id="jeV-lp-MRz"/>
+                        <outlet property="bgimage" destination="MrR-aQ-hFh" id="9AI-2K-WVO"/>
                         <outlet property="tableView" destination="cVo-4P-ev9" id="An7-hu-UeT"/>
                     </connections>
                 </viewController>
