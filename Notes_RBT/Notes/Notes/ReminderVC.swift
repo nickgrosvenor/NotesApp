@@ -43,45 +43,15 @@ class ReminderVC: UITableViewController {
         
         rightbarBtn = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: "EditReminder")
         navigationItem.rightBarButtonItems = [rightbarBtn]
-       
-//        if(NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") == nil){
-//            timeChosen = NSDate.defaultTime()
-//            println("Default Time: \(timeChosen)")
-//        }
-//        else{
-//            timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
-//            println("My Time: \(timeChosen)")
-//        }
         
         setValueForReminder()
-        
-//        timeRemBool = true
     }
    
     
     override func viewWillAppear(animated: Bool) {
         let titleDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         self.navigationController?.navigationBar.titleTextAttributes = titleDict
-        
-//        setValueForReminder()
-    }
-    
-    
-    override func viewDidAppear(animated: Bool){
-//        let formatter = NSDateFormatter()
-//        formatter.timeStyle = NSDateFormatterStyle.ShortStyle
-//        
-//        timeChosen = setRemVC.userDateChosen
-//        var cell = tableView.dequeueReusableCellWithIdentifier("Reminder Cell") as ReminderCell
-////        var indexPaths = self.tableView.indexPathsForVisibleRows() as [NSIndexPath]
-//        var indexPath = NSIndexPath(index: 0)// indexPathForRow:0, inSection:0)
-//
-//        if  indexPath == 0 && timeRemBool { //(indexPaths.first != nil) {
-//            cell.reminderValue?.text = formatter.stringFromDate(timeChosen)
-//        }
-//        
-//        println("Appeared")
-        
+        self.tableView.reloadData()
     }
     
     
@@ -90,14 +60,13 @@ class ReminderVC: UITableViewController {
             timeChosen = NSDate.defaultTime()
         } else {
             timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
-//            timeChosen = setRemVC.userDateChosen
             println("Time Changed: \(timeChosen)")
         }
     }
     
     
     func saveTimeForReminder(){
-        timeChosen = NSUserDefaults.standardUserDefaults().objectForKey("Set Reminder") as NSDate
+          NSUserDefaults.standardUserDefaults().setObject(timeChosen, forKey: "Set Reminder")
     }
 
         
@@ -120,15 +89,10 @@ class ReminderVC: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("Reminder Cell", forIndexPath: indexPath) as ReminderCell
         
         if(indexPath.row == 0){
-//            var dateComponets: NSDateComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.HourCalendarUnit | NSCalendarUnit.MinuteCalendarUnit, fromDate: timeChosen)
-//            dateComponets.second = 0
-//            var selectedDate: NSDate! = NSCalendar.currentCalendar().dateFromComponents(dateComponets)
-            
             let formatter = NSDateFormatter()
             formatter.timeStyle = NSDateFormatterStyle.ShortStyle
-            
             cell.reminderValue?.text = formatter.stringFromDate(timeChosen)
-        }else{
+        } else {
             cell.reminderValue?.text = "Daily"
         }
         
@@ -149,6 +113,11 @@ class ReminderVC: UITableViewController {
         }))
         
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    
+    func setTimeChosen(date: NSDate) {
+        timeChosen = date
     }
         
         
@@ -173,12 +142,12 @@ class ReminderVC: UITableViewController {
         return fixedDate
     }
     
-
     func EditReminder(){
         let vc = self.storyboard?.instantiateViewControllerWithIdentifier("SetReminderVC") as SetReminderVC
+        vc.dateChosen = timeChosen
+        vc.delegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
 
-   
 }
